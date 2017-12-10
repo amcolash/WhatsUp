@@ -1,6 +1,43 @@
 angular.module('app.factories', [])
 
-.factory('Auth', ['$firebaseAuth', '$q', function($firebaseAuth, $q) {
+.factory('Credentials', ['keys', '$cordovaOauth', '$q', function (keys, $cordovaOauth, $q) {
+  return function (authMethod) {
+    var deferred = $q.defer();
+    // Redirect login method
+    if (ionic.Platform.isAndroid() && window.cordova) {
+      if (authMethod === "google") {
+        window.plugins.googleplus.login({
+          'offline': true,
+          'webClientId': keys.googleId,
+        },
+          function (oauth) {
+            deferred.resolve(firebase.auth.GoogleAuthProvider.credential(oauth.idToken));
+          },
+          function (error) {
+            console.error('Error: ' + JSON.stringify(error));
+            deferred.reject(error);
+          });
+      } else if (authMethod === "twitter") {
+        $cordovaOauth.twitter(keys.twitterId, keys.twitterSecret).then(function (oauth) {
+          deferred.resolve(firebase.auth.TwitterAuthProvider.credential(oauth.oauth_token, oauth.oauth_token_secret));
+        }, function (error) {
+          console.error("Error: " + JSON.stringify(error));
+          deferred.reject(error);
+        });
+      }
+    } else {
+      if (authMethod === "google") {
+        deferred.resolve(new firebase.auth.GoogleAuthProvider());
+      } else if (authMethod === "twitter") {
+        deferred.resolve(new firebase.auth.TwitterAuthProvider());
+      }
+    }
+
+    return deferred.promise;
+  }
+}])
+
+.factory('Auth', ['$firebaseAuth', function ($firebaseAuth) {
   return $firebaseAuth();
 }])
 

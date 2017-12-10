@@ -4,12 +4,31 @@
 // 'app' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 var ionicApp = angular.module('app', [
+  // Base
   'ionic',
   'firebase',
+
+  // App
   'app.controllers',
   'app.directives',
-  'app.factories'
+  'app.factories',
+  'app.keys',
+
+  // Libs
+  'ngCordovaOauth',
 ])
+
+.run(['keys', function (keys) {
+  if (keys.googleId.length == 0) {
+    console.error("Missing googleId for Oauth");
+  }
+  if (keys.twitterId.length == 0) {
+    console.error("Missing twitterId for Oauth");
+  }
+  if (keys.twitterSecret.length == 0) {
+    console.error("Missing twitterSecret for Oauth");
+  }
+}])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -39,21 +58,10 @@ var ionicApp = angular.module('app', [
   firebase.initializeApp(config);
 })
 
-.run(['$rootScope', '$state', 'Auth', function($rootScope, $state, Auth) {
-  // Firebase and authentication init
-
+.run(['$rootScope', '$state', '$ionicLoading', 'Auth', function ($rootScope, $state, $ionicLoading, Auth) {
   $rootScope.appName = "What's Up";
 
-  $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
-    // We can catch the error thrown when the $requireSignIn promise is rejected
-    // and redirect the user back to the home page
-    if (error === 'AUTH_REQUIRED') {
-      console.error('not authenticated');
-      $state.go('login');
-    }
-  });
-
-  $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, error) {
+  $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, error) {
     // Prevent going back to the login page after a successful authentication
     if (toState.name === 'login' && Auth.$getAuth()) {
       event.preventDefault();
@@ -63,21 +71,49 @@ var ionicApp = angular.module('app', [
       event.preventDefault();
       $state.go('error');
     }
-  })
+
+    $ionicLoading.show({
+      content: 'Loading',
+      animation: 'fade-in',
+      showBackdrop: true,
+      maxWidth: 200,
+      showDelay: 0
+    });
+  });
+
+  $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+    $ionicLoading.hide();
+    // We can catch the error thrown when the $requireSignIn promise is rejected
+    // and redirect the user back to the home page
+    if (error === 'AUTH_REQUIRED') {
+      console.error('not authenticated');
+      $state.go('login');
+    } else {
+      console.log("state change error")
+      $state.go('error');
+    }
+  });
+
+  $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, error) {
+    $ionicLoading.hide();
+  });
 
   // When logging in / logging out, change states automatically
-  Auth.$onAuthStateChanged(function(authData) {
+  Auth.$onAuthStateChanged(function (authData) {
     if (authData) {
-      console.log(authData)
-      // Go to dashboard after logging in
+      // Go to search after logging in
       if ($state.current.name === "login") {
-        $state.go('app.dashboard');
+        $state.go('app.search');
       }
     } else {
       // Go back to login when logging out
       $state.go('login');
     }
   });
+}])
+
+.config(['$ionicConfigProvider', function ($ionicConfigProvider) {
+  $ionicConfigProvider.scrolling.jsScrolling(false);
 }])
 
 // If this is a desktop app, might want to disable drag scrolling
