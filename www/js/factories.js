@@ -24,12 +24,21 @@ angular.module('app.factories', [])
           console.error("Error: " + JSON.stringify(error));
           deferred.reject(error);
         });
+      } else if (authMethod === "facebook") {
+        $cordovaOauth.facebook(keys.facebookId, keys.facebookSecret).then(function (oauth) {
+          deferred.resolve(firebase.auth.FacebookAuthProvider.credential(oauth.oauth_token, oauth.oauth_token_secret));
+        }, function (error) {
+          console.error("Error: " + JSON.stringify(error));
+          deferred.reject(error);
+        });
       }
     } else {
       if (authMethod === "google") {
         deferred.resolve(new firebase.auth.GoogleAuthProvider());
       } else if (authMethod === "twitter") {
         deferred.resolve(new firebase.auth.TwitterAuthProvider());
+      } else if (authMethod === "facebook") {
+        deferred.resolve(new firebase.auth.FacebookAuthProvider());
       }
     }
 

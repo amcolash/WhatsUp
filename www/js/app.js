@@ -22,11 +22,17 @@ var ionicApp = angular.module('app', [
   if (keys.googleId.length == 0) {
     console.error("Missing googleId for Oauth");
   }
-  if (keys.twitterId.length == 0) {
-    console.error("Missing twitterId for Oauth");
+  // if (keys.twitterId.length == 0) {
+  //   console.error("Missing twitterId for Oauth");
+  // }
+  // if (keys.twitterSecret.length == 0) {
+  //   console.error("Missing twitterSecret for Oauth");
+  // }
+  if (keys.facebookId.length == 0) {
+    console.error("Missing facebookId for Oauth");
   }
-  if (keys.twitterSecret.length == 0) {
-    console.error("Missing twitterSecret for Oauth");
+  if (keys.facebookSecret.length == 0) {
+    console.error("Missing facebookSecret for Oauth");
   }
 }])
 
@@ -55,6 +61,7 @@ var ionicApp = angular.module('app', [
     storageBucket: "whatsup-346bd.appspot.com",
     messagingSenderId: "669727991231"
   };
+  
   firebase.initializeApp(config);
 })
 
@@ -101,9 +108,9 @@ var ionicApp = angular.module('app', [
   // When logging in / logging out, change states automatically
   Auth.$onAuthStateChanged(function (authData) {
     if (authData) {
-      // Go to search after logging in
+      // Go to dashboard after logging in
       if ($state.current.name === "login") {
-        $state.go('app.search');
+        $state.go('app.dashboard');
       }
     } else {
       // Go back to login when logging out

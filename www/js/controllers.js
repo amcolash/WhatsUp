@@ -33,8 +33,30 @@ angular.module('app.controllers', [])
   }, 3000);
 }])
 
-.controller('LoginController', ['$scope', 'Auth', function($scope, Auth) {
+  .controller('LoginController', ['$scope', 'Auth', 'Credentials', '$ionicPopup', function ($scope, Auth, Credentials, $ionicPopup) {
   $scope.auth = Auth;
+  $scope.credentials = Credentials;
+
+  $scope.login = function (authMethod) {
+    $scope.credentials(authMethod).then(function (credentials) {
+      if (ionic.Platform.isAndroid() && window.cordova) {
+        $scope.auth.$signInWithCredential(credentials);
+      } else {
+        $scope.auth.$signInWithPopup(credentials).catch(function(error) {
+          console.error("Error: " + JSON.stringify(error));
+
+          if (error.code && error.code === "auth/account-exists-with-different-credential") {
+            $ionicPopup.alert({
+              title: 'Existing Account',
+              template: 'It looks like you made an account with a different sign-in method, please login with that user account instead.'
+            });
+          }
+        });
+      }
+    }, function (error) {
+      console.error("Error: " + JSON.stringify(error));
+    })
+  };
 }])
 
 .controller('DashboardController', function() {
