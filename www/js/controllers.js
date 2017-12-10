@@ -59,8 +59,9 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('DashboardController', function() {
-})
+.controller('DashboardController', ['$scope', 'events', function($scope, events) {
+  $scope.events = events;
+}])
 
 .controller('UploadController', ['$scope', '$timeout', 'Storage', function($scope, $timeout, Storage) {
   Storage.then(function(data) {

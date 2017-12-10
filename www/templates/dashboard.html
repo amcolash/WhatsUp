@@ -5,6 +5,42 @@
   </ion-nav-buttons>
 
   <ion-content class="has-header">
-    <h1>{{appName}}</h1>
+    <h1>Events</h1>
+
+    <!-- {{events}} -->
+
+    <div ng-repeat="event in events.events">
+      <!-- <img class="event-picture" ng-src="{{event.coverPicture}}" alt="">
+
+      <div class="event-content">
+        <h3>{{event.name}} <button class="button button-balanced">+</button></h3>
+        <span>{{event.startTime}} - {{event.endTime}}</span>
+        <br>
+        <span>{{event.place}}</span>
+        <br>
+        <span>{{event.description}}</span>
+      </div> -->
+
+      <div class="list card">
+      
+        <div class="item item-avatar">
+          <img ng-src="{{event.coverPicture}}">
+          <h3>{{event.name}}</h3>
+          <p>{{event.startTime | date:'d MMMM yyyy hh:mm a'}} - {{event.endTime | date:'d MMMM yyyy hh:mm a'}}</p>
+        </div>
+      
+        <div class="item item-body">
+          <p>
+            {{event.description}}
+          </p>
+          <p>
+            <a href="#" class="subdued">{{event.distance | metersToMiles}} miles away</a>
+            <a href="#" class="subdued">{{event.stats | totalAttending}} people going</a>
+          </p>
+        </div>
+      
+      </div>
+    </div>
+
   </ion-content>
 </ion-view>
