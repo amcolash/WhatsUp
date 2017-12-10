@@ -28,13 +28,13 @@ var ionicApp = angular.module('app', [
     }
   });
 
-  // TODO: Change these to match your own application configuration
   var config = {
-    apiKey: "AIzaSyAcgOtX8dqawOK7Vuu4ax3fiFg46KhoOKY",
-    authDomain: "angularfire-ionic-starter.firebaseapp.com",
-    databaseURL: "https://angularfire-ionic-starter.firebaseio.com",
-    storageBucket: "angularfire-ionic-starter.appspot.com",
-    messagingSenderId: "210927824483"
+    apiKey: "AIzaSyB5IMgeGJSB0qsY3jhZ49ewH8iVd8jEpvo",
+    authDomain: "whatsup-346bd.firebaseapp.com",
+    databaseURL: "https://whatsup-346bd.firebaseio.com",
+    projectId: "whatsup-346bd",
+    storageBucket: "whatsup-346bd.appspot.com",
+    messagingSenderId: "669727991231"
   };
   firebase.initializeApp(config);
 })
