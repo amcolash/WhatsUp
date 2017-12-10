@@ -42,6 +42,8 @@ var ionicApp = angular.module('app', [
 .run(['$rootScope', '$state', 'Auth', function($rootScope, $state, Auth) {
   // Firebase and authentication init
 
+  $rootScope.appName = "What's Up";
+
   $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
     // We can catch the error thrown when the $requireSignIn promise is rejected
     // and redirect the user back to the home page
