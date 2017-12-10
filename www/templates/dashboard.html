@@ -5,16 +5,17 @@
   </ion-nav-buttons>
 
   <ion-content class="has-header">
+    <!-- <input class="ion-input" type="text"> -->
+
     <div ng-repeat="event in events.events">
       <div class="list card">
-      
         <div class="item item-avatar">
           <img ng-src="{{event.coverPicture}}">
           <a href="https://www.facebook.com/events/{{event.id}}">
             <h3>{{event.name}}</h3>
           </a>
           <p>
-            {{event.startTime | date:'MMMM d, hh:mm a'}} - {{event.endTime | date:'MMMM d, hh:mm a'}}
+            {{event.startTime | date:'MMMM d, hh:mm a'}} <span ng-if="event.endTime">- {{event.endTime | date:'MMMM d, hh:mm a'}}</span>
             <br>
             <a href="https://maps.google.com/?q={{event.place.location | location}}">
               <span class="icon ion-map padding-right"></span>

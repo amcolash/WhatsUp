@@ -46,6 +46,18 @@ angular.module('app.factories', [])
   }
 }])
 
+.factory('EventSearch', ['$http', '$q', 'keys', function($http, $q, keys) {
+  var deferred = $q.defer();
+
+  $http.get("https://graph.facebook.com/oauth/access_token?client_id=" + keys.facebookId + "&client_secret=" + keys.facebookSecret + "&grant_type=client_credentials")
+  .then(function (response) {
+    var search = new EventSearch({ "accessToken": response.data.access_token })
+    deferred.resolve(search);
+  });
+
+  return deferred.promise;
+}])
+
 .factory('Auth', ['$firebaseAuth', function ($firebaseAuth) {
   return $firebaseAuth();
 }])

@@ -59,8 +59,40 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('DashboardController', ['$scope', 'events', function($scope, events) {
-  $scope.events = events;
+.controller('DashboardController', ['$ionicLoading', '$ionicPopup', '$scope', 'EventSearch', function($ionicLoading, $ionicPopup, $scope, EventSearch) {
+  $ionicLoading.show();
+
+  EventSearch.then(function(data) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      $scope.position = position;
+
+      data.search({
+        "lat": position.coords.latitude,
+        "lng": position.coords.longitude,
+        "distance": 1000,
+        "sort": "time"
+      }).then(function (events) {
+        $scope.events = events;
+        $scope.$apply();
+
+        $ionicLoading.hide();
+      }).catch(function (error) {
+        console.error(JSON.stringify(error));
+
+        $ionicLoading.hide();
+      });
+    }, function(error) {
+      console.error(error);
+      if (error.code === 1) {
+        $ionicPopup.alert({
+          title: 'Denied Location Access',
+          template: 'It looks like you denied location access, you need to enable it for this page to use our service.'
+        });
+      }
+
+      $ionicLoading.hide();
+    });
+  })
 }])
 
 .controller('UploadController', ['$scope', '$timeout', 'Storage', function($scope, $timeout, Storage) {

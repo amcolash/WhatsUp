@@ -15,9 +15,6 @@ var ionicApp = angular.module('app', [
   'app.filters',
   'app.keys',
 
-  // Temporary
-  'app.events',
-
   // Libs
   'ngCordovaOauth',
 ])
