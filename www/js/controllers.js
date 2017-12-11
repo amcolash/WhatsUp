@@ -33,7 +33,7 @@ angular.module('app.controllers', [])
   }, 3000);
 }])
 
-  .controller('LoginController', ['$scope', 'Auth', 'Credentials', '$ionicPopup', function ($scope, Auth, Credentials, $ionicPopup) {
+.controller('LoginController', ['$scope', 'Auth', 'Credentials', '$ionicPopup', function ($scope, Auth, Credentials, $ionicPopup) {
   $scope.auth = Auth;
   $scope.credentials = Credentials;
 
