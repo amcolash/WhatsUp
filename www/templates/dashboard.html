@@ -38,10 +38,12 @@
       
         <div class="item item-body">
           <p>
-            {{event.description}}
+            <hm-read-more hm-text="{{event.description}}" hm-limit="250" hm-more-text="▼ more" hm-less-text="▲ less" hm-dots-class="dots"
+              hm-link-class="links">
+            </hm-read-more>
           </p>
           <p>
-            <span class="subdued">{{event.distance | metersToMiles}} miles away</span>
+            <span class="subdued">{{event.distance | metersToMiles}} miles away, </span>
             <span class="subdued">{{event.stats | totalAttending}} people going</span>
           </p>
         </div>

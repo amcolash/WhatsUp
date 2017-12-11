@@ -49,3 +49,17 @@ progress {
 #distanceLabel {
   width: auto;
 }
+
+/* Move/Less Styling */
+a {
+  cursor: pointer;
+}
+
+.more-show-hide {
+  -webkit-transition: all linear 0.2s;
+  transition: all linear 0.2s;
+}
+
+.more-show-hide.ng-hide {
+  opacity: 0;
+}

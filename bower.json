@@ -8,5 +8,6 @@
     "firebase": "^3.0.3",
     "angularfire": "^2.0.1",
     "ng-cordova-oauth": "^0.3.0",
+    "angular-read-more": "^1.0.6"
   }
 }

@@ -16,6 +16,7 @@ var ionicApp = angular.module('app', [
   'app.keys',
 
   // Libs
+  'hm.readmore',
   'ngCordovaOauth',
 ])
 
