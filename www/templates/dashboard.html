@@ -5,19 +5,31 @@
   </ion-nav-buttons>
 
   <ion-content class="has-header">
-    <!-- <input class="ion-input" type="text"> -->
+    <div class="list list-inset">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="Location" ng-disabled="position" ng-model="$parent.location">
+      </label>
+    </div>
+
+    <div class="item list-inset range">
+      <div id="distanceLabel" class="input-label">Distance: {{$parent.distance | metersToMiles }} mi</div>
+      <i class="icon ion-android-walk"></i>
+      <input ng-model="$parent.distance" ng-change="search()" type="range" step="500" min="500" max="10000" name="distance">
+      <i class="icon ion-android-car"></i>
+    </div>
 
     <div ng-repeat="event in events.events">
       <div class="list card">
         <div class="item item-avatar">
           <img ng-src="{{event.coverPicture}}">
-          <a href="https://www.facebook.com/events/{{event.id}}">
+          <a target="_blank" href="https://www.facebook.com/events/{{event.id}}">
             <h3>{{event.name}}</h3>
           </a>
           <p>
             {{event.startTime | date:'MMMM d, hh:mm a'}} <span ng-if="event.endTime">- {{event.endTime | date:'MMMM d, hh:mm a'}}</span>
             <br>
-            <a href="https://maps.google.com/?q={{event.place.location | location}}">
+            <a target="_blank" href="https://maps.google.com/?q={{event.place.location | location}}">
               <span class="icon ion-map padding-right"></span>
               {{event.place.name}} ({{event.place.location | location}}
             </a>

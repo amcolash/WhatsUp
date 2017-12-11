@@ -60,16 +60,27 @@ angular.module('app.controllers', [])
 }])
 
 .controller('DashboardController', ['$ionicLoading', '$ionicPopup', '$scope', 'EventSearch', function($ionicLoading, $ionicPopup, $scope, EventSearch) {
-  $ionicLoading.show();
+  $scope.distance = 2000;
+  $scope.location;
+  $scope.eventSearch;
 
+  
   EventSearch.then(function(data) {
+    $scope.eventSearch = data;
+    $scope.search();
+  })
+  
+  $scope.search = function() {
+    $ionicLoading.show();
+
     navigator.geolocation.getCurrentPosition(function (position) {
       $scope.position = position;
+      $scope.location = "(Using Your GPS Location)";
 
-      data.search({
+      $scope.eventSearch.search({
         "lat": position.coords.latitude,
         "lng": position.coords.longitude,
-        "distance": 1000,
+        "distance": $scope.distance,
         "sort": "time"
       }).then(function (events) {
         $scope.events = events;
@@ -81,7 +92,7 @@ angular.module('app.controllers', [])
 
         $ionicLoading.hide();
       });
-    }, function(error) {
+    }, function (error) {
       console.error(error);
       if (error.code === 1) {
         $ionicPopup.alert({
@@ -92,7 +103,7 @@ angular.module('app.controllers', [])
 
       $ionicLoading.hide();
     });
-  })
+  }
 }])
 
 .controller('UploadController', ['$scope', '$timeout', 'Storage', function($scope, $timeout, Storage) {
