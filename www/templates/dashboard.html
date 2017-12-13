@@ -5,42 +5,42 @@
   </ion-nav-buttons>
 
   <ion-content class="has-header">
-    <div class="list list-inset">
+    <!-- <div class="list list-inset">
       <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
         <input type="text" placeholder="Location" ng-disabled="position" ng-model="$parent.location">
       </label>
-    </div>
+    </div> -->
 
     <div class="item list-inset range">
-      <div id="distanceLabel" class="input-label">Distance: {{$parent.distance | metersToMiles }} mi</div>
+      <div id="distanceLabel" class="input-label">Distance: {{$parent.distance}} mi</div>
       <i class="icon ion-android-walk"></i>
-      <input ng-model="$parent.distance" ng-change="search()" type="range" step="500" min="500" max="10000" name="distance">
+      <input ng-model="$parent.distance" ng-mouseup="search()" type="range" step="0.25" min="0.25" max="5" name="distance">
       <i class="icon ion-android-car"></i>
     </div>
 
-    <div ng-repeat="event in events.events">
+    <div ng-repeat="event in events | orderBy: sortEvent">
       <div class="list card">
         <div class="item item-avatar">
-          <img ng-src="{{event.coverPicture}}">
-          <a target="_blank" href="https://www.facebook.com/events/{{event.id}}">
-            <h3>{{event.name}}</h3>
+          <img ng-src="{{event.coverPicture}}" src="img/event.png">
+          <i ng-class="event.icon"></i>
+          <a target="_blank" href="{{event.url}}">
+            <span>{{event.name}}</span>
           </a>
+
           <p>
-            {{event.startTime | date:'MMMM d, hh:mm a'}} <span ng-if="event.endTime">- {{event.endTime | date:'MMMM d, hh:mm a'}}</span>
-            <br>
+            <span class="icon ion-map"></span>
             <a target="_blank" href="https://maps.google.com/?q={{event.place.location | location}}">
-              <span class="icon ion-map padding-right"></span>
-              {{event.place.name}} ({{event.place.location | location}}
+              {{event.place.location | location}}
             </a>
+            <br>
+            {{event.startTime | date:'MMMM d, hh:mm a'}} <span ng-if="event.endTime">- {{event.endTime | date:'MMMM d, hh:mm a'}}</span>
           </p>
         </div>
       
         <div class="item item-body">
           <p>
-            <hm-read-more hm-text="{{event.description}}" hm-limit="250" hm-more-text="▼ more" hm-less-text="▲ less" hm-dots-class="dots"
-              hm-link-class="links">
-            </hm-read-more>
+            <hm-read-more hm-text="{{event.description}}" hm-limit="250" hm-more-text="▼ more" hm-less-text="▲ less"></hm-read-more>
           </p>
           <p>
             <span class="subdued">{{event.distance | metersToMiles}} miles away, </span>

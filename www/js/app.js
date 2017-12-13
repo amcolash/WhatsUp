@@ -121,14 +121,10 @@ var ionicApp = angular.module('app', [
   });
 }])
 
+// If this is a desktop app, might want to disable drag scrolling
 .config(['$ionicConfigProvider', function ($ionicConfigProvider) {
   $ionicConfigProvider.scrolling.jsScrolling(false);
 }])
-
-// If this is a desktop app, might want to disable drag scrolling
-// .config(function($ionicConfigProvider) {
-//   $ionicConfigProvider.scrolling.jsScrolling(false);
-// })
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider

@@ -59,39 +59,118 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('DashboardController', ['$ionicLoading', '$ionicPopup', '$scope', 'EventSearch', function($ionicLoading, $ionicPopup, $scope, EventSearch) {
-  $scope.distance = 2000;
+.controller('DashboardController', ['$http', '$ionicLoading', '$ionicPopup', '$sce', '$scope', 'keys', 'EventSearch',
+    function($http, $ionicLoading, $ionicPopup, $sce, $scope, keys, EventSearch) {
+  $scope.distance = 1;
   $scope.location;
   $scope.eventSearch;
+  $scope.events;
 
-  
+  $scope.fbLoading = false;
+  $scope.meetupLoading = false;
+
   EventSearch.then(function(data) {
     $scope.eventSearch = data;
     $scope.search();
-  })
-  
-  $scope.search = function() {
-    $ionicLoading.show();
+  });
 
+  $scope.sortEvent = function (event) {
+    var date = new Date(event.startTime);
+    return date;
+  };
+
+  $scope.search = function() {
     navigator.geolocation.getCurrentPosition(function (position) {
       $scope.position = position;
       $scope.location = "(Using Your GPS Location)";
+      
+      $ionicLoading.show();
 
-      $scope.eventSearch.search({
-        "lat": position.coords.latitude,
-        "lng": position.coords.longitude,
-        "distance": $scope.distance,
-        "sort": "time"
-      }).then(function (events) {
-        $scope.events = events;
+      // fb events
+      var fbPromise = new Promise(function (resolve, reject) {
+        $scope.eventSearch.search({
+          "lat": position.coords.latitude,
+          "lng": position.coords.longitude,
+          "distance": $scope.distance * 1609.34
+        }).then(function (events) {
+          for (var i = 0; i < events.events.length; i++) {
+            var event = events.events[i];
+            event.url = "https://www.facebook.com/events/" + event.id;
+            event.icon = "ion-social-facebook";
+          }
+
+          // return resolve([]);
+          return resolve(events.events);
+        }).catch(function (error) {
+          return reject(error);
+        });
+      });
+
+      // meetup events
+      var meetupPromise = new Promise(function (resolve, reject) {
+        var url = "https://api.meetup.com/find/upcoming_events?sign=true&photo-host=public&fields=featured_photo&page=100&callback=JSON_CALLBACK&radius=" + $scope.distance + "&key=" + keys.meetupSecret;
+
+        $http.jsonp(url)
+        .success(function (response) {
+          for (var i = 0; i < response.data.events.length; i++) {
+            var event = response.data.events[i];
+            event.url = event.link;
+            event.icon = "ion-person-stalker";
+            event.place = { location: {} };
+
+            event.name = event.group.name + " - " + event.name;
+
+            event.startTime = event.time;
+            event.endTime = event.time + event.duration;
+
+            if (event.featured_photo) {
+              event.coverPicture = event.featured_photo.thumb_link;
+            }
+
+            if (event.venue) {
+              event.place.location = {
+                street: event.venue.address_1,
+                city: event.venue.city,
+                state: event.venue.state,
+                zip: event.venue.zip
+              };
+
+              event.distance = $scope.measureGeo(position.coords.latitude, position.coords.longitude, event.venue.lat, event.venue.lon);
+            } else {
+              event.place.location.street = "Location details on meetup page";
+              event.distance = "< " + $scope.distance;
+            }
+
+            event.stats = {
+              attending: event.yes_rsvp_count || 0,
+              maybe: 0
+            };
+          }
+
+          console.log(response.data.events);
+          // return resolve([]);
+          return resolve(response.data.events);
+        }).catch(function (error) {
+          return reject(error);
+        });
+      });
+      
+      Promise.all([fbPromise, meetupPromise])
+      .then(function (allData) {
+        $scope.events = [];
+        for (var i = 0; i < allData.length; i++) {
+          var data = allData[i];
+          for (var j = 0; j < data.length; j++) {
+            $scope.events.push(data[j]);
+          }
+        }
+
         $scope.$apply();
-
         $ionicLoading.hide();
       }).catch(function (error) {
         console.error(JSON.stringify(error));
-
-        $ionicLoading.hide();
       });
+
     }, function (error) {
       console.error(error);
       if (error.code === 1) {
@@ -100,10 +179,23 @@ angular.module('app.controllers', [])
           template: 'It looks like you denied location access, you need to enable it for this page to use our service.'
         });
       }
-
-      $ionicLoading.hide();
     });
   }
+
+  // generally used geo measurement function
+  $scope.measureGeo = function(lat1, lon1, lat2, lon2) {
+    var rad = 0.0174533;
+    var R = 6378.137; // Radius of earth in KM
+    var dLat = lat2 * rad - lat1 * rad;
+    var dLon = lon2 * rad - lon1 * rad;
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * rad) * Math.cos(lat2 * rad) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+    return d * 1000; // meters
+  }
+
 }])
 
 .controller('UploadController', ['$scope', '$timeout', 'Storage', function($scope, $timeout, Storage) {
