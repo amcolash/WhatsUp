@@ -29,12 +29,18 @@
           </a>
 
           <p>
-            <div ng-if="event.location">
+            <div>
               <span class="icon ion-map"></span>
-              <a target="_blank" href="https://maps.google.com/?q={{event.location | locationMap}}">
-                {{event.location | location}}
-              </a>
+              <span ng-if="event.location">
+                <a target="_blank" href="https://maps.google.com/?q={{event.location | locationMap}}">
+                  {{event.location | location}}
+                </a>
+              </span>
+              <span ng-if="!event.location">
+                No location speficied, check the event page
+              </span>
             </div>
+
             {{event.startTime | date:'MMMM d, hh:mm a'}} <span ng-if="event.endTime">- {{event.endTime | date:'MMMM d, hh:mm a'}}</span>
           </p>
         </div>

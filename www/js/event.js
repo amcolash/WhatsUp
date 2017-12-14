@@ -56,7 +56,7 @@ angular.module('app.event', [])
         }
 
         if (meetupEvent.venue) {
-            var street = meetupEvent.venue.address_1;
+            var street = (meetupEvent.venue.address_1 ? meetupEvent.venue.address_1 : "") + (meetupEvent.venue.address_2 ? meetupEvent.venue.address_2 : "");
             var city = meetupEvent.venue.city;
             var state = meetupEvent.venue.state;
             var zip = meetupEvent.venue.zip;
@@ -65,6 +65,36 @@ angular.module('app.event', [])
             var distance = measureGeo(position.coords.latitude, position.coords.longitude, lat, lng);
 
             var location = new Location(street, city, state, zip, lat, lng, distance);
+        }
+
+        var newEvent = new Event(name, description, url, startTime, endTime, icon, attending, picture, location);
+        return newEvent;
+    }
+
+    Event.convertEventbriteEvent = function (eventbriteEvent, position) {
+        var name = eventbriteEvent.name.text;
+        var description = eventbriteEvent.description.text;
+        var url = eventbriteEvent.url;
+        var startTime = eventbriteEvent.start.utc;
+        var endTime = eventbriteEvent.end.utc;
+        var icon = "ion-card";
+        var attending; // Maybe we want this?
+        var picture = eventbriteEvent.logo ? eventbriteEvent.logo.url : undefined;
+
+        if (eventbriteEvent.venue) {
+            var street;
+            if (eventbriteEvent.venue.address.address_1 !== null) street = eventbriteEvent.venue.address.address_1;
+            if (eventbriteEvent.venue.address.address_2 !== null) street += " " + eventbriteEvent.venue.address.address_2;
+
+            var city = eventbriteEvent.venue.address.city;
+            var state = eventbriteEvent.venue.address.region;
+            var zip = eventbriteEvent.venue.address.postal_code === null ? undefined : eventbriteEvent.venue.postal_code;
+            var lat = eventbriteEvent.venue.latitude;
+            var lng = eventbriteEvent.venue.longitude;
+            var distance = measureGeo(position.coords.latitude, position.coords.longitude, lat, lng);
+            var locationName = eventbriteEvent.venue.name;
+
+            var location = new Location(street, city, state, zip, lat, lng, distance, locationName);
         }
 
         var newEvent = new Event(name, description, url, startTime, endTime, icon, attending, picture, location);

@@ -95,7 +95,6 @@ angular.module('app.controllers', [])
         }).then(function (events) {
           var tmpEvents = [];
           for (var i = 0; i < events.events.length; i++) {
-            // console,log(Event);
             tmpEvents.push(Event.convertFBEvent(events.events[i]));
           }
           // return resolve([]);
@@ -107,7 +106,9 @@ angular.module('app.controllers', [])
 
       // meetup events
       var meetupPromise = new Promise(function (resolve, reject) {
-        var url = "https://api.meetup.com/find/upcoming_events?sign=true&photo-host=public&fields=featured_photo&page=100&callback=JSON_CALLBACK&radius=" + $scope.distance + "&key=" + keys.meetupSecret;
+        var url = "https://api.meetup.com/find/upcoming_events?sign=true&photo-host=public&fields=featured_photo&lat="
+          + position.coords.latitude + "&lon=" + position.coords.longitude + "&page=100&callback=JSON_CALLBACK&radius="
+          + $scope.distance + "&key=" + keys.meetupSecret;
 
         $http.jsonp(url)
         .success(function (response) {
@@ -122,7 +123,25 @@ angular.module('app.controllers', [])
         });
       });
       
-      Promise.all([fbPromise, meetupPromise])
+      // eventbrite events
+      var eventbritePromise = new Promise(function (resolve, reject) {
+        var url = "https://www.eventbriteapi.com/v3/events/search/?expand=venue&location.latitude=" + position.coords.latitude
+          + "&location.longitude=" + position.coords.longitude + "&location.within=" + $scope.distance + "mi&token=" + keys.eventbriteSecret;
+
+        $http.get(url)
+        .success(function (response) {
+          var events = [];
+          for (var i = 0; i < response.events.length; i++) {
+            events.push(Event.convertEventbriteEvent(response.events[i], position));
+          }
+          // return resolve([]);
+          return resolve(events);
+        }).catch(function (error) {
+          return reject(error);
+        });
+      });
+
+      Promise.all([fbPromise, meetupPromise, eventbritePromise])
       .then(function (allData) {
         $scope.events = [];
         for (var i = 0; i < allData.length; i++) {

@@ -14,7 +14,14 @@ angular.module('app.filters', [])
 
 .filter('locationMap', function () {
     return function (input) {
-        return input.street + ", " + input.city + ", " + input.state + " " + input.zip;;
+        var loc = "";
+
+        if (input.street) loc += input.street;
+        if (input.city) loc += (loc.length > 0 ? ", " : "") + input.city;
+        if (input.state) loc += (loc.length > 0 ? ", " : "") + input.state;
+        if (input.zip) loc += (loc.length > 0 ? " " : "") + input.zip;
+
+        return loc;
     }
 })
 
@@ -22,9 +29,12 @@ angular.module('app.filters', [])
     return function(input) {
         var loc = "";
 
-        if (input.name) loc += input.name + " (";
-        loc += input.street + ", " + input.city + ", " + input.state + " " + input.zip;
-        if (input.name) loc += ")";
+        if (input.street) loc += input.street;
+        if (input.city) loc += (loc.length > 0 ? ", " : "") + input.city;
+        if (input.state) loc += (loc.length > 0 ? ", " : "") + input.state;
+        if (input.zip) loc += (loc.length > 0 ? " " : "") + input.zip;
+        
+        if (input.name) loc = input.name + " (" + loc + ")";
 
         return loc;
     }
