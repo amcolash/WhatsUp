@@ -59,8 +59,8 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('DashboardController', ['$http', '$ionicLoading', '$ionicPopup', '$sce', '$scope', 'keys', 'EventSearch',
-    function($http, $ionicLoading, $ionicPopup, $sce, $scope, keys, EventSearch) {
+.controller('DashboardController', ['$http', '$ionicLoading', '$ionicPopup', '$scope', 'Event', 'Location', 'keys', 'EventSearch',
+    function($http, $ionicLoading, $ionicPopup, $scope, Event, Location, keys, EventSearch) {
   $scope.distance = 1;
   $scope.location;
   $scope.eventSearch;
@@ -93,14 +93,13 @@ angular.module('app.controllers', [])
           "lng": position.coords.longitude,
           "distance": $scope.distance * 1609.34
         }).then(function (events) {
+          var tmpEvents = [];
           for (var i = 0; i < events.events.length; i++) {
-            var event = events.events[i];
-            event.url = "https://www.facebook.com/events/" + event.id;
-            event.icon = "ion-social-facebook";
+            // console,log(Event);
+            tmpEvents.push(Event.convertFBEvent(events.events[i]));
           }
-
           // return resolve([]);
-          return resolve(events.events);
+          return resolve(tmpEvents);
         }).catch(function (error) {
           return reject(error);
         });
@@ -112,44 +111,12 @@ angular.module('app.controllers', [])
 
         $http.jsonp(url)
         .success(function (response) {
+          var events = [];
           for (var i = 0; i < response.data.events.length; i++) {
-            var event = response.data.events[i];
-            event.url = event.link;
-            event.icon = "ion-person-stalker";
-            event.place = { location: {} };
-
-            event.name = event.group.name + " - " + event.name;
-
-            event.startTime = event.time;
-            event.endTime = event.time + event.duration;
-
-            if (event.featured_photo) {
-              event.coverPicture = event.featured_photo.thumb_link;
-            }
-
-            if (event.venue) {
-              event.place.location = {
-                street: event.venue.address_1,
-                city: event.venue.city,
-                state: event.venue.state,
-                zip: event.venue.zip
-              };
-
-              event.distance = $scope.measureGeo(position.coords.latitude, position.coords.longitude, event.venue.lat, event.venue.lon);
-            } else {
-              event.place.location.street = "Location details on meetup page";
-              event.distance = "< " + $scope.distance;
-            }
-
-            event.stats = {
-              attending: event.yes_rsvp_count || 0,
-              maybe: 0
-            };
+            events.push(Event.convertMeetupEvent(response.data.events[i], position));
           }
-
-          console.log(response.data.events);
           // return resolve([]);
-          return resolve(response.data.events);
+          return resolve(events);
         }).catch(function (error) {
           return reject(error);
         });
@@ -164,7 +131,6 @@ angular.module('app.controllers', [])
             $scope.events.push(data[j]);
           }
         }
-
         $scope.$apply();
         $ionicLoading.hide();
       }).catch(function (error) {
@@ -180,20 +146,6 @@ angular.module('app.controllers', [])
         });
       }
     });
-  }
-
-  // generally used geo measurement function
-  $scope.measureGeo = function(lat1, lon1, lat2, lon2) {
-    var rad = 0.0174533;
-    var R = 6378.137; // Radius of earth in KM
-    var dLat = lat2 * rad - lat1 * rad;
-    var dLon = lon2 * rad - lon1 * rad;
-    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1 * rad) * Math.cos(lat2 * rad) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c;
-    return d * 1000; // meters
   }
 
 }])

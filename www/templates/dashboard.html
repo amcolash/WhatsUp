@@ -22,18 +22,19 @@
     <div ng-repeat="event in events | orderBy: sortEvent">
       <div class="list card">
         <div class="item item-avatar">
-          <img ng-src="{{event.coverPicture}}" src="img/event.png">
+          <img ng-src="{{event.picture}}" src="img/event.png">
           <i ng-class="event.icon"></i>
           <a target="_blank" href="{{event.url}}">
             <span>{{event.name}}</span>
           </a>
 
           <p>
-            <span class="icon ion-map"></span>
-            <a target="_blank" href="https://maps.google.com/?q={{event.place.location | location}}">
-              {{event.place.location | location}}
-            </a>
-            <br>
+            <div ng-if="event.location">
+              <span class="icon ion-map"></span>
+              <a target="_blank" href="https://maps.google.com/?q={{event.location | locationMap}}">
+                {{event.location | location}}
+              </a>
+            </div>
             {{event.startTime | date:'MMMM d, hh:mm a'}} <span ng-if="event.endTime">- {{event.endTime | date:'MMMM d, hh:mm a'}}</span>
           </p>
         </div>
@@ -43,8 +44,8 @@
             <hm-read-more hm-text="{{event.description}}" hm-limit="250" hm-more-text="▼ more" hm-less-text="▲ less"></hm-read-more>
           </p>
           <p>
-            <span class="subdued">{{event.distance | metersToMiles}} miles away, </span>
-            <span class="subdued">{{event.stats | totalAttending}} people going</span>
+            <span ng-if="event.location.distance" class="subdued">{{event.location.distance | metersToMiles}} miles away, </span>
+            <span class="subdued">{{event.attending}} people going</span>
           </p>
         </div>
       

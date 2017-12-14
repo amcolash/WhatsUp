@@ -13,6 +13,8 @@ var ionicApp = angular.module('app', [
   'app.directives',
   'app.factories',
   'app.filters',
+
+  'app.event',
   'app.keys',
 
   // Libs

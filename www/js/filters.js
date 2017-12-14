@@ -12,20 +12,19 @@ angular.module('app.filters', [])
     }
 })
 
-.filter('totalAttending', function () {
+.filter('locationMap', function () {
     return function (input) {
-        return input.attending + input.maybe;
+        return input.street + ", " + input.city + ", " + input.state + " " + input.zip;;
     }
 })
 
 .filter('location', function() {
     return function(input) {
-        var loc = input.street;
+        var loc = "";
 
-        if (input.name) loc = "(" + input.name + ") " + loc;
-        if (input.city) loc += ", " + input.city;
-        if (input.state) loc += ", " + input.state;
-        if (input.zip) loc += " " + input.zip;
+        if (input.name) loc += input.name + " (";
+        loc += input.street + ", " + input.city + ", " + input.state + " " + input.zip;
+        if (input.name) loc += ")";
 
         return loc;
     }
