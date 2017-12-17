@@ -6,7 +6,9 @@
       
         <info-window id="info-window">
           <div ng-non-bindable="">
-            <h3>{{selectedEvent.name}}</h3>
+            <h4>{{selectedEvent.name}}</h3>
+            <b>{{selectedEvent.startTime | date:'MMMM d, hh:mm a'}}<span ng-if="selectedEvent.endTime">- {{selectedEvent.endTime | date:'MMMM d, hh:mm a'}}</span></b>
+            <br>
             {{selectedEvent.description}}
           </div>
         </info-window>

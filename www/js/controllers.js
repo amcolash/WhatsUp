@@ -40,14 +40,16 @@ angular.module('app.controllers', [])
   $scope.events;
   $scope.categories;
   $scope.searchText = "";
+  $scope.position;
 
   
   $geolocation.getCurrentPosition({
     timeout: 30000
   }).then(function (position) {
+    $scope.position = { lat: position.coords.latitude, lng: position.coords.longitude };
     $ionicLoading.show( { "showBackdrop": false });
 
-    EventList.search(position).then(function(data) {
+    EventList.search($scope.position).then(function(data) {
       $ionicLoading.hide();
 
       $scope.categories = data.categories;
@@ -119,7 +121,6 @@ angular.module('app.controllers', [])
 
     $scope.selectedEvent;
     $scope.showDetail = function (e, event) {
-      console.log(event)
       $scope.selectedEvent = event;
       $scope.map.showInfoWindow('info-window', event.id);
     }
