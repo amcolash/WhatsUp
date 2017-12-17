@@ -153,8 +153,8 @@ angular.module('app.controllers', [])
 
       // Comment these out to disable fetching events from different services
       var promises = [
-        // fbPromise,
-        // meetupPromise,
+        fbPromise,
+        meetupPromise,
         eventbritePromise
       ];
 
