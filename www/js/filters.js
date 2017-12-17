@@ -39,3 +39,18 @@ angular.module('app.filters', [])
         return loc;
     }
 })
+
+.filter('categoryFilter', function () {
+    return function (events, category) {
+        if (category === undefined || category === "All") {
+            return events;
+        } else {
+            var data = [];
+            for (var i = 0; i < events.length; i++) {
+                if (events[i].category === category) data.push(events[i]);
+            }
+
+            return data;
+        }
+    }
+});

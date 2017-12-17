@@ -28,7 +28,7 @@ angular.module('app.controllers', [])
   $scope.check = $interval(function() {
     if (navigator.onLine) {
       $interval.cancel($scope.check);
-      $state.go('app.dashboard');
+      $state.go('app.eventList');
     }
   }, 3000);
 }])
@@ -59,15 +59,14 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('DashboardController', ['$http', '$ionicLoading', '$ionicPopup', '$scope', 'Event', 'Location', 'keys', 'EventSearch',
+.controller('EventListController', ['$http', '$ionicLoading', '$ionicPopup', '$scope', 'Event', 'Location', 'keys', 'EventSearch',
     function($http, $ionicLoading, $ionicPopup, $scope, Event, Location, keys, EventSearch) {
-  $scope.distance = 1;
+  $scope.distance = 5;
   $scope.location;
-  $scope.eventSearch;
   $scope.events;
+  $scope.categories;
 
-  $scope.fbLoading = false;
-  $scope.meetupLoading = false;
+  var logEvents = false;
 
   EventSearch.then(function(data) {
     $scope.eventSearch = data;
@@ -86,13 +85,19 @@ angular.module('app.controllers', [])
       
       $ionicLoading.show();
 
+      var maxEvents = 50;
+      var endTime = new Date();
+      endTime.setDate(endTime.getDate() + 3); // Search 3 days out
+
       // fb events
       var fbPromise = new Promise(function (resolve, reject) {
         $scope.eventSearch.search({
           "lat": position.coords.latitude,
           "lng": position.coords.longitude,
-          "distance": $scope.distance * 1609.34
+          "distance": $scope.distance * 1609.34,
+          "until": endTime.toISOStringCustom()
         }).then(function (events) {
+          if (logEvents) console.log(events.events);
           var tmpEvents = [];
           for (var i = 0; i < events.events.length; i++) {
             tmpEvents.push(Event.convertFBEvent(events.events[i]));
@@ -106,18 +111,21 @@ angular.module('app.controllers', [])
 
       // meetup events
       var meetupPromise = new Promise(function (resolve, reject) {
-        var url = "https://api.meetup.com/find/upcoming_events?sign=true&photo-host=public&fields=featured_photo&lat="
-          + position.coords.latitude + "&lon=" + position.coords.longitude + "&page=100&callback=JSON_CALLBACK&radius="
-          + $scope.distance + "&key=" + keys.meetupSecret;
+        var url = "https://api.meetup.com/find/upcoming_events?sign=true&photo-host=public&fields=featured_photo,group_category&lat="
+          + position.coords.latitude + "&lon=" + position.coords.longitude + "&page=" + maxEvents + "&end_date_range="
+          + endTime.toISOStringCustom() + "&callback=JSON_CALLBACK&radius=" + $scope.distance + "&key=" + keys.meetupSecret;
 
         $http.jsonp(url)
         .success(function (response) {
-          var events = [];
+          if (response.data.errors) return reject(response.data.errors);
+
+          if (logEvents) console.log(response.data.events);
+          var tmpEvents = [];
           for (var i = 0; i < response.data.events.length; i++) {
-            events.push(Event.convertMeetupEvent(response.data.events[i], position));
+            tmpEvents.push(Event.convertMeetupEvent(response.data.events[i], position));
           }
           // return resolve([]);
-          return resolve(events);
+          return resolve(tmpEvents);
         }).catch(function (error) {
           return reject(error);
         });
@@ -125,31 +133,58 @@ angular.module('app.controllers', [])
       
       // eventbrite events
       var eventbritePromise = new Promise(function (resolve, reject) {
-        var url = "https://www.eventbriteapi.com/v3/events/search/?expand=venue&location.latitude=" + position.coords.latitude
-          + "&location.longitude=" + position.coords.longitude + "&location.within=" + $scope.distance + "mi&token=" + keys.eventbriteSecret;
+        var url = "https://www.eventbriteapi.com/v3/events/search/?expand=venue,category,subcategory&location.latitude=" + position.coords.latitude
+          + "&location.longitude=" + position.coords.longitude + "&location.within=" + $scope.distance + "mi&start_date.range_end="
+          + endTime.toISOStringCustom() + "&token=" + keys.eventbriteSecret;
 
         $http.get(url)
         .success(function (response) {
-          var events = [];
+          if (logEvents) console.log(response.events);
+          var tmpEvents = [];
           for (var i = 0; i < response.events.length; i++) {
-            events.push(Event.convertEventbriteEvent(response.events[i], position));
+            tmpEvents.push(Event.convertEventbriteEvent(response.events[i], position));
           }
           // return resolve([]);
-          return resolve(events);
+          return resolve(tmpEvents);
         }).catch(function (error) {
           return reject(error);
         });
       });
 
-      Promise.all([fbPromise, meetupPromise, eventbritePromise])
+      // Comment these out to disable fetching events from different services
+      var promises = [
+        // fbPromise,
+        // meetupPromise,
+        eventbritePromise
+      ];
+
+      // Run all promises, do not fail on promises that are rejected
+      Promise.settleAll(promises)
       .then(function (allData) {
         $scope.events = [];
+        $scope.categories = [];
+
+        // Can't seem to loop over set in this version of angular
+        tmpCategories = new Set();
+        
         for (var i = 0; i < allData.length; i++) {
           var data = allData[i];
           for (var j = 0; j < data.length; j++) {
             $scope.events.push(data[j]);
+
+            if (data[j].category) {
+              tmpCategories.add(data[j].category);
+            }
           }
         }
+
+        for (let category of tmpCategories) {
+          $scope.categories.push(category);
+        }
+        $scope.categories.push("All");
+
+        $scope.selectedCategory = "All";
+
         $scope.$apply();
         $ionicLoading.hide();
       }).catch(function (error) {

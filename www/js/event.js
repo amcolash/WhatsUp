@@ -3,17 +3,20 @@ angular.module('app.event', [])
 /* Shared Event Format */
 
 .factory('Event', ['Location', function (Location) {
-    function Event(name, description, url, startTime, endTime, icon, attending, picture, location) {
-        // Required
+    function Event(name, description, url, startTime, endTime, icon, source, category, isFree, attending, picture, location) {
+        // Loosely Required
         this.name = name;
         this.description = description;
         this.url = url;
         this.startTime = startTime;
         this.endTime = endTime;
         this.icon = icon;
-        this.attending = attending;
-
+        this.source = source;
+        this.category = category;
+        this.isFree = isFree;
+        
         // Optional
+        this.attending = attending;
         this.picture = picture;
         this.location = location;
     }
@@ -25,8 +28,25 @@ angular.module('app.event', [])
         var startTime = fbEvent.startTime;
         var endTime = fbEvent.endTime;
         var icon = "ion-social-facebook";
+        var source = "facebook";
+        var category;
+        var isFree = true;
         var attending = fbEvent.stats.attending;
         var picture = fbEvent.coverPicture;
+
+        if (fbEvent.category) {
+            category = fbEvent.category;
+            category = category.replace('_EVENT', '');
+            category = category.replace('EVENT_', '');
+
+            category = category.replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
+                return index == 0 ? letter.toUpperCase() : letter.toLowerCase();
+            }).replace(/\s+/g, '');
+
+            if (category === "Cause") {
+                category = "Charity & Causes";
+            }
+        }
 
         var street = fbEvent.place.location.street;
         var city = fbEvent.place.location.city;
@@ -39,7 +59,7 @@ angular.module('app.event', [])
 
         var location = new Location(street, city, state, zip, lat, lng, distance, locationName);
 
-        return new Event(name, description, url, startTime, endTime, icon, attending, picture, location);
+        return new Event(name, description, url, startTime, endTime, icon, source, category, isFree, attending, picture, location);
     }
 
     Event.convertMeetupEvent = function (meetupEvent, position) {
@@ -49,7 +69,14 @@ angular.module('app.event', [])
         var startTime = meetupEvent.time;
         var endTime = meetupEvent.time + meetupEvent.duration;
         var icon = "ion-person-stalker";
+        var source = "meetup";
+        var category;
+        var isFree = meetupEvent.fee === undefined;
         var attending = meetupEvent.yes_rsvp_count;
+        
+        if (meetupEvent.group && meetupEvent.group.category) {
+            category = meetupEvent.group.category.short_name;
+        } 
 
         if (meetupEvent.featured_photo) {
             var picture = meetupEvent.featured_photo.thumb_link;
@@ -67,8 +94,7 @@ angular.module('app.event', [])
             var location = new Location(street, city, state, zip, lat, lng, distance);
         }
 
-        var newEvent = new Event(name, description, url, startTime, endTime, icon, attending, picture, location);
-        return newEvent;
+        return new Event(name, description, url, startTime, endTime, icon, source, category, isFree, attending, picture, location);
     }
 
     Event.convertEventbriteEvent = function (eventbriteEvent, position) {
@@ -78,8 +104,15 @@ angular.module('app.event', [])
         var startTime = eventbriteEvent.start.utc;
         var endTime = eventbriteEvent.end.utc;
         var icon = "ion-card";
+        var source = "eventbrite";
+        var category;
+        var isFree = eventbriteEvent.is_free;
         var attending; // Maybe we want this?
         var picture = eventbriteEvent.logo ? eventbriteEvent.logo.url : undefined;
+
+        if (eventbriteEvent.category) {
+            category = eventbriteEvent.category.short_name;
+        }
 
         if (eventbriteEvent.venue) {
             var street;
@@ -97,8 +130,7 @@ angular.module('app.event', [])
             var location = new Location(street, city, state, zip, lat, lng, distance, locationName);
         }
 
-        var newEvent = new Event(name, description, url, startTime, endTime, icon, attending, picture, location);
-        return newEvent;
+        return new Event(name, description, url, startTime, endTime, icon, source, category, isFree, attending, picture, location);
     }
 
     // generally used geo measurement function

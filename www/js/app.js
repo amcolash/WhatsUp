@@ -158,12 +158,12 @@ var ionicApp = angular.module('app', [
       }
     })
 
-    .state('app.dashboard', {
+    .state('app.eventList', {
       url: '/',
       views: {
         'menuContent': {
-          templateUrl: 'templates/dashboard.html',
-          controller: 'DashboardController'
+          templateUrl: 'templates/eventList.html',
+          controller: 'EventListController'
         }
       }
     })
