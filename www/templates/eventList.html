@@ -1,7 +1,7 @@
 <ion-view title="Nearby">
 
   <ion-nav-buttons side="left">
-    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    <button menu-toggle="left" class="button button-icon icon icon-menu"></button>
   </ion-nav-buttons>
 
   <ion-content class="has-header">
@@ -20,10 +20,11 @@
     </div> -->
 
     <div class="list list-inset">
-      <label class="item item-input">
-        <i class="icon ion-search placeholder-icon"></i>
-        <input type="text" placeholder="Search" ng-model="searchText">
-      </label>
+      <div class="item item-input">
+        <i class="icon icon-search placeholder-icon"></i>
+        <input type="text" placeholder="Search" ng-model="$parent.searchText">
+        <button class="button-icon input-button icon-cross placeholder-icon hover pad-right" ng-if="searchText.length > 0" ng-click="clearSearch()"></button>
+      </div>
     </div>
 
     <div class="list list-inset">
@@ -35,19 +36,19 @@
       </label>
     </div>
 
-    <div ng-repeat="event in events | categoryFilter:(selectedCategory) | filter:searchText">
+    <div ng-repeat="event in events | categoryFilter:(selectedCategory) | filter:searchText | limitTo: 50 | orderBy: sortEvent">
       <div class="list card">
         <div class="item item-avatar">
           <img ng-src="{{event.picture}}" src="img/event.png">
           <i ng-class="event.icon"></i>
           <a target="_blank" href="{{event.url}}">
             <span>{{event.name}}</span>
-            <i ng-if="!event.isFree" class="icon ion-social-usd"></i>
+            <i ng-if="!event.isFree" class="icon icon-coin-dollar"></i>
           </a>
 
           <p>
             <div>
-              <span class="icon ion-map"></span>
+              <span class="icon icon-map2"></span>
               <span ng-if="event.location">
                 <a target="_blank" href="https://maps.google.com/?q={{event.location | locationMap}}">
                   {{event.location | location}}

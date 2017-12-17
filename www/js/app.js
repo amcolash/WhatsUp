@@ -114,7 +114,7 @@ var ionicApp = angular.module('app', [
     if (authData) {
       // Go to dashboard after logging in
       if ($state.current.name === "login") {
-        $state.go('app.dashboard');
+        $state.go('app.eventList');
       }
     } else {
       // Go back to login when logging out

@@ -3,6 +3,16 @@
   text-align: center;
 }
 
+.pad-right {
+  padding-right: 10px;
+}
+
+.span-button {
+  font-family: "-apple-system","Helvetica Neue",Roboto,"Segoe UI",sans-serif;
+  line-height: 42px;
+  /* font-size: 18px; */
+}
+
 /* Custom Progressbar */
 progress::-moz-progress-bar {
   background: #444;
@@ -51,7 +61,7 @@ progress {
 }
 
 /* Move/Less Styling */
-a {
+a, .hover {
   cursor: pointer;
 }
 

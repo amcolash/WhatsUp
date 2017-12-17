@@ -65,6 +65,7 @@ angular.module('app.controllers', [])
   $scope.location;
   $scope.events;
   $scope.categories;
+  $scope.searchText = "";
 
   var logEvents = false;
 
@@ -76,6 +77,10 @@ angular.module('app.controllers', [])
   $scope.sortEvent = function (event) {
     var date = new Date(event.startTime);
     return date;
+  };
+
+  $scope.clearSearch = function() {
+    $scope.searchText = "";
   };
 
   $scope.search = function() {

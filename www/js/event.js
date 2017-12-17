@@ -27,7 +27,7 @@ angular.module('app.event', [])
         var url = "https://www.facebook.com/events/" + fbEvent.id;
         var startTime = fbEvent.startTime;
         var endTime = fbEvent.endTime;
-        var icon = "ion-social-facebook";
+        var icon = "icon-facebook";
         var source = "facebook";
         var category;
         var isFree = true;
@@ -68,7 +68,7 @@ angular.module('app.event', [])
         var url = meetupEvent.link;
         var startTime = meetupEvent.time;
         var endTime = meetupEvent.time + meetupEvent.duration;
-        var icon = "ion-person-stalker";
+        var icon = "icon-users";
         var source = "meetup";
         var category;
         var isFree = meetupEvent.fee === undefined;
@@ -103,7 +103,7 @@ angular.module('app.event', [])
         var url = eventbriteEvent.url;
         var startTime = eventbriteEvent.start.utc;
         var endTime = eventbriteEvent.end.utc;
-        var icon = "ion-card";
+        var icon = "icon-ticket";
         var source = "eventbrite";
         var category;
         var isFree = eventbriteEvent.is_free;
