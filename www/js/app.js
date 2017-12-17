@@ -147,8 +147,7 @@ var ionicApp = angular.module('app', [
 
     .state('app', {
       abstract: true,
-      templateUrl: 'templates/menu.html',
-      controller: 'MenuController',
+      templateUrl: 'templates/tabs.html',
       // main app controller will not be loaded until $requireSignIn resolves
       // Auth refers to our $firebaseAuth wrapper in the factory below
       // $requireSignIn returns a promise so the resolve waits for it to complete
@@ -163,19 +162,19 @@ var ionicApp = angular.module('app', [
     .state('app.eventList', {
       url: '/',
       views: {
-        'menuContent': {
+        'event-tab': {
           templateUrl: 'templates/eventList.html',
           controller: 'EventListController'
         }
       }
     })
 
-    .state('app.upload', {
-      url: '/upload',
+    .state('app.map', {
+      url: '/map',
       views: {
-        'menuContent': {
-          templateUrl: 'templates/upload.html',
-          controller: 'UploadController'
+        'map-tab': {
+          templateUrl: 'templates/map.html',
+          controller: 'MapController'
         }
       }
     })
@@ -183,7 +182,7 @@ var ionicApp = angular.module('app', [
     .state('app.settings', {
       url: '/settings',
       views: {
-        'menuContent': {
+        'settings-tab': {
           templateUrl: 'templates/settings.html',
           controller: 'SettingsController'
         }

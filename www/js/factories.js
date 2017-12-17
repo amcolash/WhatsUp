@@ -87,26 +87,3 @@ angular.module('app.factories', [])
 
   return promise;
 }])
-
-.factory('Storage', ['Auth', '$firebaseArray', function(Auth, $firebaseArray) {
-  var promise = new Promise(function (resolve, reject) {
-
-    Auth.$onAuthStateChanged(function(authData) {
-      if (authData && authData.uid) {
-        var fileRef = firebase.database().ref('users/' + authData.uid + '/files');
-        var fileList = $firebaseArray(fileRef);
-
-        var storageRef = firebase.storage().ref();
-        var storage = storageRef.child('users/' + authData.uid + '/uploads');
-
-        // Should wait for those to resolve first...
-        resolve({
-          fileList: fileList,
-          storage: storage
-        });
-      }
-    });
-  });
-
-  return promise;
-}])

@@ -17,6 +17,15 @@
   width: 100%;
 }
 
+.tabs {
+  padding: 8px 0 6px;
+  height: auto;
+}
+
+.tab-item .icon {
+  margin-bottom: 5px;
+}
+
 /* Custom Progressbar */
 progress::-moz-progress-bar {
   background: #444;

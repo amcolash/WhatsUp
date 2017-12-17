@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('../fonts/icomoon.eot?sfklh0');
-  src:  url('../fonts/icomoon.eot?sfklh0#iefix') format('embedded-opentype'),
-    url('../fonts/icomoon.ttf?sfklh0') format('truetype'),
-    url('../fonts/icomoon.woff?sfklh0') format('woff'),
-    url('../fonts/icomoon.svg?sfklh0#icomoon') format('svg');
+  src:  url('../fonts/icomoon.eot?dlk9fq');
+  src:  url('../fonts/icomoon.eot?dlk9fq#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?dlk9fq') format('truetype'),
+    url('../fonts/icomoon.woff?dlk9fq') format('woff'),
+    url('../fonts/icomoon.svg?dlk9fq#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -36,8 +36,11 @@
 .icon-location2:before {
   content: "\e948";
 }
-.icon-compass:before {
-  content: "\e949";
+.icon-compass2:before {
+  content: "\e94a";
+}
+.icon-map:before {
+  content: "\e94b";
 }
 .icon-map2:before {
   content: "\e94c";
@@ -53,6 +56,9 @@
 }
 .icon-cog:before {
   content: "\e994";
+}
+.icon-list:before {
+  content: "\e9ba";
 }
 .icon-star-empty:before {
   content: "\e9d7";
