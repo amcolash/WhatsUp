@@ -74,11 +74,6 @@ angular.module('app.controllers', [])
     $scope.search();
   });
 
-  $scope.sortEvent = function (event) {
-    var date = new Date(event.startTime);
-    return date;
-  };
-
   $scope.clearSearch = function() {
     $scope.searchText = "";
   };
@@ -175,13 +170,19 @@ angular.module('app.controllers', [])
         for (var i = 0; i < allData.length; i++) {
           var data = allData[i];
           for (var j = 0; j < data.length; j++) {
-            $scope.events.push(data[j]);
-
-            if (data[j].category) {
-              tmpCategories.add(data[j].category);
+            // Cut things that are longer than 3 days
+            if (new Date(data[j].endTime) - new Date(data[j].startTime) < (1000 * 60 * 60 * 24 * 3)) {
+              $scope.events.push(data[j]);
+              if (data[j].category) {
+                tmpCategories.add(data[j].category);
+              }
             }
           }
         }
+
+        $scope.events.sort(function(a, b) {
+          return new Date(a.startTime) - new Date(b.startTime);
+        });
 
         for (let category of tmpCategories) {
           $scope.categories.push(category);

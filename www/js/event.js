@@ -3,6 +3,8 @@ angular.module('app.event', [])
 /* Shared Event Format */
 
 .factory('Event', ['Location', function (Location) {
+    Event.id = 0;
+
     function Event(name, description, url, startTime, endTime, icon, source, category, isFree, attending, picture, location) {
         // Loosely Required
         this.name = name;
@@ -14,7 +16,11 @@ angular.module('app.event', [])
         this.source = source;
         this.category = category;
         this.isFree = isFree;
-        
+
+        // Set a unique id, then increment the id counter
+        this.id = Event.id;
+        Event.id++;
+
         // Optional
         this.attending = attending;
         this.picture = picture;
