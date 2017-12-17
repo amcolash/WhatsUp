@@ -40,10 +40,9 @@ angular.module('app.event', [])
             category = fbEvent.category;
             category = category.replace('_EVENT', '');
             category = category.replace('EVENT_', '');
+            category = category.replace(/_/g, '\ ');
 
-            category = category.replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
-                return index == 0 ? letter.toUpperCase() : letter.toLowerCase();
-            }).replace(/\s+/g, '');
+            category = toTitleCase(category);
 
             if (category === "Cause") {
                 category = "Charity & Causes";
@@ -149,6 +148,10 @@ angular.module('app.event', [])
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         var d = R * c;
         return d * 1000; // meters
+    }
+
+    function toTitleCase(str) {
+        return str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
     }
 
     return Event;

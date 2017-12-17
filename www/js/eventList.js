@@ -16,6 +16,7 @@ angular.module('app.eventList', [])
       var logEvents = false;
       var maxEvents = 50;
       var endTime = new Date();
+      var trimEvents = true;
       endTime.setDate(endTime.getDate() + 3); // Search 3 days out
 
       var config = {
@@ -46,7 +47,7 @@ angular.module('app.eventList', [])
           for (var j = 0; j < data.length; j++) {
 
             // Cut things that are longer than 3 days
-            if (new Date(data[j].endTime) - new Date(data[j].startTime) < (1000 * 60 * 60 * 24 * 3)) {
+            if (!trimEvents || new Date(data[j].endTime) - new Date(data[j].startTime) < (1000 * 60 * 60 * 24 * 3)) {
               events.push(data[j]);
               if (data[j].category) {
                 tmpCategories.add(data[j].category);
