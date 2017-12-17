@@ -2,12 +2,15 @@ angular.module('app.eventList', [])
 
 .factory('EventList', ['$http', 'Event', 'Location', 'FBEventSearch', 'keys', function ($http, Event, Location, FBEventSearch, keys) {
 
-  var data;
+  var eventList = {};
   
-  function search(position) {
+  eventList.search = function (position) {
     var promise = new Promise(function (resolve, reject) {
     
-      if (data) resolve(data);
+      if (eventList.data) {
+        console.log("using cached data")
+        resolve(eventList.data);
+      }
 
       var distance = 5;
       var logEvents = false;
@@ -66,9 +69,9 @@ angular.module('app.eventList', [])
         categories.push("All");
         categories.sort();
 
-        data = { events, categories };
+        eventList.data = { events, categories, position };
 
-        resolve(data);
+        resolve(eventList.data);
       }).catch(function (error) {
         console.error(JSON.stringify(error));
         reject(error);
@@ -151,5 +154,5 @@ angular.module('app.eventList', [])
   }
 
 
-  return search;
+  return eventList;
 }]);

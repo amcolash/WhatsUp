@@ -47,7 +47,7 @@ angular.module('app.controllers', [])
   }).then(function (position) {
     $ionicLoading.show( { "showBackdrop": false });
 
-    EventList(position).then(function(data) {
+    EventList.search(position).then(function(data) {
       $ionicLoading.hide();
 
       $scope.categories = data.categories;
@@ -77,8 +77,34 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('MapController', ['$scope', function($scope) {
+.controller('MapController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', 'EventList',
+  function ($geolocation, $ionicLoading, $ionicPopup, $scope, EventList) {
 
+    $geolocation.getCurrentPosition({
+      timeout: 30000
+    }).then(function (position) {
+      $ionicLoading.show({ "showBackdrop": false });
+
+      EventList.search(position).then(function (data) {
+        $ionicLoading.hide();
+
+        $scope.categories = data.categories;
+        $scope.events = data.events;
+      }).catch(function (error) {
+        $ionicLoading.hide();
+        console.error(error);
+      });
+    }).catch(function (error) {
+      console.error(error);
+
+      if (error.error.code === 1) {
+        $ionicPopup.alert({
+          title: 'Denied Location Access',
+          template: 'It looks like you denied location access, you need to enable it for location-based features or add your location '
+            + 'to the settings page to use our service.'
+        });
+      }
+    });
 }])
 
 .controller('SettingsController', ['$scope', '$state', 'Auth', 'Settings', function($scope, $state, Auth, Settings) {
