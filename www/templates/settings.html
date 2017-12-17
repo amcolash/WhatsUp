@@ -4,7 +4,16 @@
       <div class="list list-inset">
         <ion-toggle ng-model="$parent.settings.test" toggle-class="toggle-calm">TEST</ion-toggle>
 
-        <button class="button button-block icon-exit button-assertive" ng-click="signOut()">
+        <div class="item item-input">
+          <span class="input-label">My Location</span>
+          <input type="text" placeholder="(Using GPS)" places-auto-complete size=80 ng-model="$parent.settings.locationFriendly" on-place-changed="placeChanged()">
+          <button id="clearButton" class="button-icon input-button icon-cross placeholder-icon hover padding-right"
+          ng-show="$parent.settings.locationFriendly.length > 0" ng-click="clearLocation()"></button>
+        </div>
+      </div>
+
+      <div id="logout">
+        <button type="button" class="button button-block icon-exit button-assertive" ng-click="signOut()">
           <span class="span-button">Logout</span>
         </button>
       </div>

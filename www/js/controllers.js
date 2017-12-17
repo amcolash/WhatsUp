@@ -35,21 +35,41 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('EventListController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', 'EventList',
-    function ($geolocation, $ionicLoading, $ionicPopup, $scope, EventList) {
+.controller('EventListController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', 'EventList', 'Settings',
+    function ($geolocation, $ionicLoading, $ionicPopup, $scope, EventList, Settings) {
   $scope.events;
   $scope.categories;
   $scope.searchText = "";
   $scope.position;
 
-  
-  $geolocation.getCurrentPosition({
-    timeout: 30000
-  }).then(function (position) {
-    $scope.position = { lat: position.coords.latitude, lng: position.coords.longitude };
-    $ionicLoading.show( { "showBackdrop": false });
+  Settings.then(function (data) {
+    if (data.location) {
+      $scope.position = data.location;
+      $scope.search();
+    } else {
+      $geolocation.getCurrentPosition({
+        timeout: 30000
+      }).then(function (position) {
+        $scope.position = { lat: position.coords.latitude, lng: position.coords.longitude };
+        $scope.search();
+      }).catch(function (error) {
+        console.error(error);
 
-    EventList.search($scope.position).then(function(data) {
+        if (error.error.code === 1) {
+          $ionicPopup.alert({
+            title: 'Denied Location Access',
+            template: 'It looks like you denied location access, you need to enable it for location-based features or add your location '
+              + 'to the settings page to use our service.'
+          });
+        }
+      });
+    }
+  });
+
+  $scope.search = function() {
+    $ionicLoading.show({ "showBackdrop": false });
+
+    EventList.search($scope.position).then(function (data) {
       $ionicLoading.hide();
 
       $scope.categories = data.categories;
@@ -58,17 +78,7 @@ angular.module('app.controllers', [])
       $ionicLoading.hide();
       console.error(error);
     });
-  }).catch(function (error) {
-    console.error(error);
-
-    if (error.error.code === 1) {
-      $ionicPopup.alert({
-        title: 'Denied Location Access',
-        template: 'It looks like you denied location access, you need to enable it for location-based features or add your location '
-          + 'to the settings page to use our service.'
-      });
-    }
-  });
+  }
 
   $scope.clearSearch = function() {
     // Make this click feel more responsive
@@ -79,17 +89,39 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('MapController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', 'EventList', 'NgMap',
-  function ($geolocation, $ionicLoading, $ionicPopup, $scope, EventList, NgMap) {
+.controller('MapController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', 'EventList', 'NgMap', 'Settings',
+  function ($geolocation, $ionicLoading, $ionicPopup, $scope, EventList, NgMap, Settings) {
 
     $scope.events;
     $scope.map;
     $scope.position;
+    $scope.selectedEvent;
 
-    $geolocation.getCurrentPosition({
-      timeout: 30000
-    }).then(function (position) {
-      $scope.position = { lat: position.coords.latitude, lng: position.coords.longitude };
+    Settings.then(function (data) {
+      if (data.location) {
+        $scope.position = data.location;
+        $scope.search();
+      } else {
+        $geolocation.getCurrentPosition({
+          timeout: 30000
+        }).then(function (position) {
+          $scope.position = { lat: position.coords.latitude, lng: position.coords.longitude };
+          $scope.search();
+        }).catch(function (error) {
+          console.error(error);
+
+          if (error.error.code === 1) {
+            $ionicPopup.alert({
+              title: 'Denied Location Access',
+              template: 'It looks like you denied location access, you need to enable it for location-based features or add your location '
+                + 'to the settings page to use our service.'
+            });
+          }
+        });
+      }
+    });
+
+    $scope.search = function () {
       $ionicLoading.show({ "showBackdrop": false });
 
       EventList.search($scope.position).then(function (data) {
@@ -107,26 +139,16 @@ angular.module('app.controllers', [])
         $ionicLoading.hide();
         console.error(error);
       });
-    }).catch(function (error) {
-      console.error(error);
+    }
 
-      if (error.error.code === 1) {
-        $ionicPopup.alert({
-          title: 'Denied Location Access',
-          template: 'It looks like you denied location access, you need to enable it for location-based features or add your location '
-            + 'to the settings page to use our service.'
-        });
-      }
-    });
-
-    $scope.selectedEvent;
     $scope.showDetail = function (e, event) {
       $scope.selectedEvent = event;
       $scope.map.showInfoWindow('info-window', event.id);
     }
 }])
 
-.controller('SettingsController', ['$scope', '$state', 'Auth', 'Settings', function($scope, $state, Auth, Settings) {
+.controller('SettingsController', ['$ionicPopup', '$scope', '$state', 'Auth', 'EventList', 'NgMap', 'Settings',
+    function($ionicPopup, $scope, $state, Auth, EventList, NgMap, Settings) {
   Settings.then(function(data) {
     data.$bindTo($scope, "settings").then(function(unbind) {
       $scope.$on('$ionicView.beforeLeave', function() {
@@ -135,8 +157,29 @@ angular.module('app.controllers', [])
     });
   });
 
+  $scope.clearLocation = function() {
+    console.log("clear")
+    $scope.settings.location = {};
+    $scope.settings.locationFriendly = "";
+    EventList.reset();
+  }
+
+  $scope.placeChanged = function() {
+    $scope.settings.location = { lat: this.getPlace().geometry.location.lat(), lng: this.getPlace().geometry.location.lng() };
+    EventList.reset();
+  }
+
   // not worrying about errors right now
   $scope.signOut = function () {
-    Auth.$signOut();
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Log Out',
+      template: 'Are you sure you want to log out?'
+    });
+
+    confirmPopup.then(function (res) {
+      if (res) {
+        Auth.$signOut();
+      }
+    });
   }
 }])

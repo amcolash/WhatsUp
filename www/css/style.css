@@ -3,10 +3,6 @@
   text-align: center;
 }
 
-.pad-right {
-  padding-right: 10px;
-}
-
 .span-button {
   font-family: "-apple-system","Helvetica Neue",Roboto,"Segoe UI",sans-serif;
   line-height: 42px;
@@ -27,6 +23,13 @@
 
 ng-map {
   height: 100%;
+}
+
+#logout {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  padding: 0 10px;
 }
 
 /* Darker card shadows */

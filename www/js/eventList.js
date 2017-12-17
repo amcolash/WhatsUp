@@ -82,6 +82,10 @@ angular.module('app.eventList', [])
     return promise;
   }
 
+  eventList.reset = function() {
+    eventList.data = undefined;
+  }
+
   function fbPromise(config) {
     // fb events
     return new Promise(function (resolve, reject) {
