@@ -10,7 +10,6 @@
 .span-button {
   font-family: "-apple-system","Helvetica Neue",Roboto,"Segoe UI",sans-serif;
   line-height: 42px;
-  /* font-size: 18px; */
 }
 
 .expand-select {
@@ -26,41 +25,8 @@
   margin-bottom: 5px;
 }
 
-/* Custom Progressbar */
-progress::-moz-progress-bar {
-  background: #444;
-}
-
-progress::-webkit-progress-value {
-  background: #444;
-}
-
-progress {
-  color: #444;
-  border: 1px solid #0063a6;
-  background: #fff;
-}
-
-/* Custom file upload button */
-.file-upload {
-  color: #aaa;
-}
-
-.file-upload .file-input {
-  visibility: hidden;
-  width: 0;
-}
-
-/* Custom trash icon style */
-.ion-trash-a {
-  padding: 6px 10px;
-  margin-left: 6px;
-  border-radius: 3px;
-  font-size: 21px;
-  vertical-align: middle;
-  color: #ddd;
-  background-color: #444;
-  cursor: pointer;
+ng-map {
+  height: 100%;
 }
 
 /* Darker card shadows */

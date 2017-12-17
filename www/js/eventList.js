@@ -87,8 +87,8 @@ angular.module('app.eventList', [])
     return new Promise(function (resolve, reject) {
       FBEventSearch.then(function (eventSearch) {
         eventSearch.search({
-          "lat": config.position.coords.latitude,
-          "lng": config.position.coords.longitude,
+          "lat": config.position.lat,
+          "lng": config.position.lng,
           "distance": config.distance * 1609.34,
           "until": config.endTime.toISOStringCustom()
         }).then(function (events) {
@@ -112,7 +112,7 @@ angular.module('app.eventList', [])
     // meetup events
     return new Promise(function (resolve, reject) {
       var url = "https://api.meetup.com/find/upcoming_events?sign=true&photo-host=public&fields=featured_photo,group_category&lat="
-        + config.position.coords.latitude + "&lon=" + config.position.coords.longitude + "&page=" + config.maxEvents + "&end_date_range="
+        + config.position.lat + "&lon=" + config.position.lng + "&page=" + config.maxEvents + "&end_date_range="
         + config.endTime.toISOStringCustom() + "&callback=JSON_CALLBACK&radius=" + config.distance + "&key=" + keys.meetupSecret;
 
       $http.jsonp(url)
@@ -134,8 +134,8 @@ angular.module('app.eventList', [])
   function eventbritePromise(config) {
     // eventbrite events
     return new Promise(function (resolve, reject) {
-      var url = "https://www.eventbriteapi.com/v3/events/search/?expand=venue,category,subcategory&location.latitude=" + config.position.coords.latitude
-        + "&location.longitude=" + config.position.coords.longitude + "&location.within=" + config.distance + "mi&start_date.range_end="
+      var url = "https://www.eventbriteapi.com/v3/events/search/?expand=venue,category,subcategory&location.latitude=" + config.position.lat
+        + "&location.longitude=" + config.position.lng + "&location.within=" + config.distance + "mi&start_date.range_end="
         + config.endTime.toISOStringCustom() + "&token=" + keys.eventbriteSecret;
 
       $http.get(url)

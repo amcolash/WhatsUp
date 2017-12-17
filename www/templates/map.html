@@ -1,5 +1,18 @@
 <ion-view title="Map">
   <ion-content class="has-header">
-    <h1>Map</h1>
+    <ng-map center="41,-87" zoom="3">
+      <marker ng-repeat="event in events" id="{{event.id}}" position="{{event.location.lat}}, {{event.location.lng}}" title="{{event.name}}"
+        on-click="showDetail(event, event)"></marker>
+      
+        <info-window id="info-window">
+          <div ng-non-bindable="">
+            <h3>{{selectedEvent.name}}</h3>
+            {{selectedEvent.description}}
+          </div>
+        </info-window>
+
+        <shape id="circle" name="circle" centered="true" center="{{position}}" stroke-color='#0000FF' stroke-opacity="0.8" stroke-weight="2"
+          radius="50"></shape>
+    </ng-map>
   </ion-content>
 </ion-view>

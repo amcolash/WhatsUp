@@ -77,19 +77,30 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('MapController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', 'EventList',
-  function ($geolocation, $ionicLoading, $ionicPopup, $scope, EventList) {
+.controller('MapController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', 'EventList', 'NgMap',
+  function ($geolocation, $ionicLoading, $ionicPopup, $scope, EventList, NgMap) {
+
+    $scope.events;
+    $scope.map;
+    $scope.position;
 
     $geolocation.getCurrentPosition({
       timeout: 30000
     }).then(function (position) {
+      $scope.position = { lat: position.coords.latitude, lng: position.coords.longitude };
       $ionicLoading.show({ "showBackdrop": false });
 
-      EventList.search(position).then(function (data) {
+      EventList.search($scope.position).then(function (data) {
         $ionicLoading.hide();
 
-        $scope.categories = data.categories;
         $scope.events = data.events;
+
+        NgMap.getMap().then(function (map) {
+          $scope.map = map;
+
+          map.setCenter($scope.position);
+          map.setZoom(15);
+        });
       }).catch(function (error) {
         $ionicLoading.hide();
         console.error(error);
@@ -105,6 +116,13 @@ angular.module('app.controllers', [])
         });
       }
     });
+
+    $scope.selectedEvent;
+    $scope.showDetail = function (e, event) {
+      console.log(event)
+      $scope.selectedEvent = event;
+      $scope.map.showInfoWindow('info-window', event.id);
+    }
 }])
 
 .controller('SettingsController', ['$scope', '$state', 'Auth', 'Settings', function($scope, $state, Auth, Settings) {

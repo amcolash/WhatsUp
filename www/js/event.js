@@ -92,7 +92,7 @@ angular.module('app.event', [])
             var zip = meetupEvent.venue.zip;
             var lat = meetupEvent.venue.lat;
             var lng = meetupEvent.venue.lon;
-            var distance = measureGeo(position.coords.latitude, position.coords.longitude, lat, lng);
+            var distance = measureGeo(position.lat, position.lng, lat, lng);
 
             var location = new Location(street, city, state, zip, lat, lng, distance);
         }
@@ -128,7 +128,7 @@ angular.module('app.event', [])
             var zip = eventbriteEvent.venue.address.postal_code === null ? undefined : eventbriteEvent.venue.postal_code;
             var lat = eventbriteEvent.venue.latitude;
             var lng = eventbriteEvent.venue.longitude;
-            var distance = measureGeo(position.coords.latitude, position.coords.longitude, lat, lng);
+            var distance = measureGeo(position.lat, position.lng, lat, lng);
             var locationName = eventbriteEvent.venue.name;
 
             var location = new Location(street, city, state, zip, lat, lng, distance, locationName);
