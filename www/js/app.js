@@ -15,6 +15,7 @@ var ionicApp = angular.module('app', [
   'app.filters',
 
   'app.event',
+  'app.eventList',
   'app.keys',
 
   // Libs

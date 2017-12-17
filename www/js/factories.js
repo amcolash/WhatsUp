@@ -47,7 +47,7 @@ angular.module('app.factories', [])
   }
 }])
 
-.factory('EventSearch', ['$http', 'keys', function($http, keys) {
+.factory('FBEventSearch', ['$http', 'keys', function($http, keys) {
   var promise = new Promise(function(resolve, reject) {
     $http.get("https://graph.facebook.com/oauth/access_token?client_id=" + keys.facebookId + "&client_secret=" + keys.facebookSecret + "&grant_type=client_credentials")
       .then(function (response) {

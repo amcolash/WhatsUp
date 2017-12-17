@@ -59,21 +59,26 @@ angular.module('app.controllers', [])
   };
 }])
 
-  .controller('EventListController', ['$geolocation', '$http', '$ionicLoading', '$ionicPopup', '$scope', 'keys', 'EventSearch',
-    function ($geolocation, $http, $ionicLoading, $ionicPopup, $scope, keys, EventSearch) {
+.controller('EventListController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', 'EventList',
+    function ($geolocation, $ionicLoading, $ionicPopup, $scope, EventList) {
   $scope.events;
   $scope.categories;
   $scope.searchText = "";
 
-  EventSearch.then(function(data) {
-    $scope.eventSearch = data;
-    // $scope.search(); // TODO:
-  });
-
+  
   $geolocation.getCurrentPosition({
-    timeout: 60000
+    timeout: 30000
   }).then(function (position) {
-    console.log(position);
+    $ionicLoading.show();
+    EventList(position).then(function(data) {
+      $ionicLoading.hide();
+
+      $scope.categories = data.categories;
+      $scope.events = data.events;
+    }).catch(function (error) {
+      $ionicLoading.hide();
+      console.error(error);
+    });
   }).catch(function (error) {
     console.error(error);
 
