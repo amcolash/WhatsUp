@@ -59,7 +59,7 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('EventListController', ['$http', '$ionicLoading', '$ionicPopup', '$scope', 'Event', 'Location', 'keys', 'EventSearch',
+  .controller('EventListController', ['$http', '$ionicLoading', '$ionicPopup', '$scope', 'Event', 'Location', 'keys', 'EventSearch',
     function($http, $ionicLoading, $ionicPopup, $scope, Event, Location, keys, EventSearch) {
   $scope.distance = 5;
   $scope.location;
@@ -75,6 +75,10 @@ angular.module('app.controllers', [])
   });
 
   $scope.clearSearch = function() {
+    // Make this click feel more responsive
+    var button = angular.element(document.querySelector('#clearButton'));
+    if (button) button.addClass("ng-hide");
+
     $scope.searchText = "";
   };
 
@@ -188,7 +192,6 @@ angular.module('app.controllers', [])
           $scope.categories.push(category);
         }
         $scope.categories.push("All");
-
         $scope.selectedCategory = "All";
 
         $scope.$apply();

@@ -22,8 +22,8 @@
     <div class="list list-inset">
       <div class="item item-input">
         <i class="icon icon-search placeholder-icon"></i>
-        <input type="text" placeholder="Search" ng-model="$parent.searchText" ng-model-options="{debounce: 250}">
-        <button class="button-icon input-button icon-cross placeholder-icon hover pad-right" ng-if="searchText.length > 0" ng-click="clearSearch()"></button>
+        <input type="text" placeholder="Search" ng-model="$parent.searchText">
+        <button id="clearButton" class="button-icon input-button icon-cross placeholder-icon hover pad-right" ng-show="searchText.length > 0" ng-click="clearSearch()"></button>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
       </label>
     </div>
 
-    <div ng-repeat="event in events | categoryFilter:(selectedCategory) | filter:searchText track by event.id">
+    <div ng-repeat="event in events" ng-show="([event] | filter:searchText | categoryFilter:selectedCategory).length">
       <div class="list card">
         <div class="item item-avatar">
           <img ng-src="{{event.picture}}" src="img/event.png">
