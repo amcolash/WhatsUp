@@ -1,7 +1,9 @@
 {
   "name": "What's Up",
   "app_id": "",
-  "integrations": {},
+  "integrations": {
+    "gulp": {}
+  },
   "type": "ionic1",
   "watchPatterns": [
     "scss/**/*",

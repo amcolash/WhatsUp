@@ -20,6 +20,7 @@ var ionicApp = angular.module('app', [
   // Libs
   'hm.readmore',
   'ngCordovaOauth',
+  'ngGeolocation'
 ])
 
 .run(['keys', function (keys) {
