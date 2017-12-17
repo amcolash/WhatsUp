@@ -38,8 +38,9 @@ angular.module('app.controllers', [])
 .controller('EventListController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', 'EventList', 'Settings',
     function ($geolocation, $ionicLoading, $ionicPopup, $scope, EventList, Settings) {
   $scope.events;
-  $scope.categories;
   $scope.searchText = "";
+  $scope.categories;
+  $scope.selectedCategory;
   $scope.position;
 
   Settings.then(function (data) {
@@ -74,6 +75,7 @@ angular.module('app.controllers', [])
 
       $scope.categories = data.categories;
       $scope.events = data.events;
+      $scope.selectedCategory = "All";
     }).catch(function (error) {
       $ionicLoading.hide();
       console.error(error);
