@@ -3,10 +3,9 @@ angular.module('app.event', [])
 /* Shared Event Format */
 
 .factory('Event', ['Location', function (Location) {
-    Event.id = 0;
-
-    function Event(name, description, url, startTime, endTime, icon, source, category, isFree, attending, picture, location) {
+    function Event(id, name, description, url, startTime, endTime, icon, source, category, isFree, attending, picture, location) {
         // Loosely Required
+        this.id = id;
         this.name = name;
         this.description = description;
         this.url = url;
@@ -17,10 +16,6 @@ angular.module('app.event', [])
         this.category = category;
         this.isFree = isFree;
 
-        // Set a unique id, then increment the id counter
-        this.id = Event.id;
-        Event.id++;
-
         // Optional
         this.attending = attending;
         this.picture = picture;
@@ -28,6 +23,7 @@ angular.module('app.event', [])
     }
 
     Event.convertFBEvent = function(fbEvent) {
+        var id = "fb" + fbEvent.id;
         var name = fbEvent.name;
         var description = fbEvent.description;
         var url = "https://www.facebook.com/events/" + fbEvent.id;
@@ -65,10 +61,11 @@ angular.module('app.event', [])
 
         var location = new Location(street, city, state, zip, lat, lng, distance, locationName);
 
-        return new Event(name, description, url, startTime, endTime, icon, source, category, isFree, attending, picture, location);
+        return new Event(id, name, description, url, startTime, endTime, icon, source, category, isFree, attending, picture, location);
     }
 
     Event.convertMeetupEvent = function (meetupEvent, position) {
+        var id = "meetup" + meetupEvent.id;
         var name = meetupEvent.group.name + " - " + meetupEvent.name;
         var description = meetupEvent.description;
         var url = meetupEvent.link;
@@ -100,10 +97,11 @@ angular.module('app.event', [])
             var location = new Location(street, city, state, zip, lat, lng, distance);
         }
 
-        return new Event(name, description, url, startTime, endTime, icon, source, category, isFree, attending, picture, location);
+        return new Event(id, name, description, url, startTime, endTime, icon, source, category, isFree, attending, picture, location);
     }
 
     Event.convertEventbriteEvent = function (eventbriteEvent, position) {
+        var id = "eventbrite" + eventbriteEvent.id;
         var name = eventbriteEvent.name.text;
         var description = eventbriteEvent.description.text;
         var url = eventbriteEvent.url;
@@ -136,7 +134,7 @@ angular.module('app.event', [])
             var location = new Location(street, city, state, zip, lat, lng, distance, locationName);
         }
 
-        return new Event(name, description, url, startTime, endTime, icon, source, category, isFree, attending, picture, location);
+        return new Event(id, name, description, url, startTime, endTime, icon, source, category, isFree, attending, picture, location);
     }
 
     // generally used geo measurement function
