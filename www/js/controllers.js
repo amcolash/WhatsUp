@@ -149,8 +149,8 @@ angular.module('app.controllers', [])
     }
 }])
 
-.controller('SettingsController', ['$ionicPopup', '$scope', '$state', 'Auth', 'EventList', 'NgMap', 'Settings',
-    function($ionicPopup, $scope, $state, Auth, EventList, NgMap, Settings) {
+.controller('SettingsController', ['$ionicHistory', '$ionicPopup', '$scope', '$state', 'Auth', 'EventList', 'NgMap', 'Settings',
+    function($ionicHistory, $ionicPopup, $scope, $state, Auth, EventList, NgMap, Settings) {
   Settings.then(function(data) {
     data.$bindTo($scope, "settings").then(function(unbind) {
       $scope.$on('$ionicView.beforeLeave', function() {
@@ -160,15 +160,20 @@ angular.module('app.controllers', [])
   });
 
   $scope.clearLocation = function() {
-    console.log("clear")
     $scope.settings.location = {};
     $scope.settings.locationFriendly = "";
-    EventList.reset();
+    $scope.reset();
   }
 
   $scope.placeChanged = function() {
     $scope.settings.location = { lat: this.getPlace().geometry.location.lat(), lng: this.getPlace().geometry.location.lng() };
+    $scope.reset();
+  }
+
+  $scope.reset = function() {
     EventList.reset();
+    $ionicHistory.clearCache();
+    $ionicHistory.clearHistory();
   }
 
   // not worrying about errors right now
