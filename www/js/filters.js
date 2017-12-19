@@ -53,4 +53,20 @@ angular.module('app.filters', [])
             return data;
         }
     }
-});
+})
+
+.filter('upcomingFilter', function () {
+    return function (events) {
+        var now = new Date();
+        var data = [];
+        for (var i = 0; i < events.length; i++) {
+            if (new Date(events[i].endTime) > now) {
+                data.push(events[i]);
+            }
+        }
+
+        return data;
+    }
+})
+
+;

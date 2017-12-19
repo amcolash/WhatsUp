@@ -30,7 +30,7 @@
       </divl>
     </div>
 
-    <div ng-repeat="event in events" ng-show="([event] | filter:searchText | categoryFilter:selectedCategory).length">
+    <div ng-repeat="event in events" ng-show="([event] | filter:searchText | categoryFilter:selectedCategory | upcomingFilter).length">
       <div class="list card">
         <div class="item item-avatar">
           <img ng-src="{{event.picture}}" src="img/event.png">

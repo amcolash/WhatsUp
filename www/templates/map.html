@@ -1,7 +1,7 @@
 <ion-view title="Map">
   <ion-content class="has-header">
     <ng-map center="41,-87" zoom="3">
-      <marker ng-repeat="event in events" id="{{event.id}}" position="{{event.location.lat}}, {{event.location.lng}}" title="{{event.name}}"
+      <marker ng-repeat="event in events | upcommingFilter" id="{{event.id}}" position="{{event.location.lat}}, {{event.location.lng}}" title="{{event.name}}"
         on-click="showDetail(event, event)"></marker>
       
         <info-window id="info-window">
