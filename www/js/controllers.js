@@ -92,13 +92,25 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('MapController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', 'EventList', 'NgMap', 'Settings',
-  function ($geolocation, $ionicLoading, $ionicPopup, $scope, EventList, NgMap, Settings) {
+.controller('MapController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', '$timeout', 'EventList', 'NgMap', 'Settings',
+  function ($geolocation, $ionicLoading, $ionicPopup, $scope, $timeout, EventList, NgMap, Settings) {
 
     $scope.events;
     $scope.map;
     $scope.position;
     $scope.selectedEvent;
+    $scope.radius = 30;
+    $scope.theta = 0;
+
+    $scope.intervalFunction = function () {
+      $timeout(function () {
+        $scope.radius = Math.abs(Math.sin($scope.theta)) * 15 + 35;
+        $scope.theta += .1;
+        $scope.intervalFunction();
+      }, 100)
+    };
+
+    $scope.intervalFunction();
 
     Settings.then(function (data) {
       if (data.location) {
