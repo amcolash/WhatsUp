@@ -56,7 +56,8 @@ angular.module('app.controllers', [])
       }).catch(function (error) {
         console.error(error);
 
-        if (error.error.code === 1) {
+        if (error.error.code === 1 && !data.gpsFailed) {
+          data.gpsFailed = true;
           $ionicPopup.alert({
             title: 'Denied Location Access',
             template: 'It looks like you denied location access, you need to enable it for location-based features or add your location '
@@ -112,7 +113,8 @@ angular.module('app.controllers', [])
         }).catch(function (error) {
           console.error(error);
 
-          if (error.error.code === 1) {
+          if (error.error.code === 1 && !data.gpsFailed) {
+            data.gpsFailed = true;
             $ionicPopup.alert({
               title: 'Denied Location Access',
               template: 'It looks like you denied location access, you need to enable it for location-based features or add your location '
@@ -172,6 +174,7 @@ angular.module('app.controllers', [])
 
   $scope.reset = function() {
     EventList.reset();
+    $scope.settings.gpsFailed = false;
     $ionicHistory.clearCache();
     $ionicHistory.clearHistory();
   }

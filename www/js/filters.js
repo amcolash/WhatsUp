@@ -57,11 +57,14 @@ angular.module('app.filters', [])
 
 .filter('upcomingFilter', function () {
     return function (events) {
-        var now = new Date();
         var data = [];
-        for (var i = 0; i < events.length; i++) {
-            if (new Date(events[i].endTime) > now) {
-                data.push(events[i]);
+
+        if (events) {
+            var now = new Date();
+            for (var i = 0; i < events.length; i++) {
+                if (new Date(events[i].endTime) > now) {
+                    data.push(events[i]);
+                }
             }
         }
 
