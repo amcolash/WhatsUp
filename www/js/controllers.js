@@ -149,6 +149,11 @@ angular.module('app.controllers', [])
       $scope.selectedEvent = event;
       $scope.map.showInfoWindow('info-window', event.id);
     }
+
+    $scope.centerMap = function() {
+      $scope.map.setCenter($scope.position);
+      $scope.map.setZoom(15);
+    }
 }])
 
 .controller('SettingsController', ['$ionicHistory', '$ionicPopup', '$scope', '$state', 'Auth', 'EventList', 'NgMap', 'Settings',

@@ -12,6 +12,7 @@
   width: 100%;
 }
 
+/* Tab Stuff */
 .tabs {
   padding: 8px 0 6px;
   height: auto;
@@ -21,9 +22,34 @@
   margin-bottom: 5px;
 }
 
+.bar-footer.has-tabs, .has-tabs {
+    bottom: 67px;
+}
+
+/* Map */
 ng-map {
   height: 100%;
 }
+
+#center-map {
+  margin-left: 10px;
+  margin-bottom: 14px;
+}
+
+#center-map .icon {
+  color: #387ef5;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 8px -2px;
+  text-shadow: 0.5px 0.5px #ccc;
+  background-color: white;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  font-size: 34px;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+/* Logout Button */
 
 #logout {
   position: fixed;
