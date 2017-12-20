@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('../fonts/icomoon.eot?dlk9fq');
-  src:  url('../fonts/icomoon.eot?dlk9fq#iefix') format('embedded-opentype'),
-    url('../fonts/icomoon.ttf?dlk9fq') format('truetype'),
-    url('../fonts/icomoon.woff?dlk9fq') format('woff'),
-    url('../fonts/icomoon.svg?dlk9fq#icomoon') format('svg');
+  src:  url('../fonts/icomoon.eot?h2io8t');
+  src:  url('../fonts/icomoon.eot?h2io8t#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?h2io8t') format('truetype'),
+    url('../fonts/icomoon.woff?h2io8t') format('woff'),
+    url('../fonts/icomoon.svg?h2io8t#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,8 +24,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-location:before {
+  content: "\e904";
+}
 .icon-menu:before {
   content: "\e900";
+}
+.icon-meetup2:before {
+  content: "\e901";
+}
+.icon-eventbrite:before {
+  content: "\e902";
+}
+.icon-meetup:before {
+  content: "\e903";
 }
 .icon-ticket:before {
   content: "\e939";
@@ -45,9 +57,6 @@
 .icon-map2:before {
   content: "\e94c";
 }
-.icon-bell:before {
-  content: "\e951";
-}
 .icon-users:before {
   content: "\e972";
 }
@@ -56,6 +65,9 @@
 }
 .icon-cog:before {
   content: "\e994";
+}
+.icon-power-cord:before {
+  content: "\e9b7";
 }
 .icon-list:before {
   content: "\e9ba";
