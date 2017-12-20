@@ -14,16 +14,7 @@
 
 /* Tab Stuff */
 .tabs {
-  padding: 8px 0 6px;
-  height: auto;
-}
-
-.tab-item .icon {
-  margin-bottom: 5px;
-}
-
-.bar-footer.has-tabs, .has-tabs {
-    bottom: 67px;
+  padding-top: 8px;
 }
 
 /* Map */

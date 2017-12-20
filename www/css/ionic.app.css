@@ -552,10 +552,10 @@ ion-infinite-scroll {
   top: 88px; }
 
 .has-tabs-top {
-  top: 93px; }
+  top: 100px; }
 
 .has-header.has-subheader.has-tabs-top {
-  top: 137px; }
+  top: 144px; }
 
 .has-footer {
   bottom: 44px; }
@@ -565,17 +565,17 @@ ion-infinite-scroll {
 
 .has-tabs,
 .bar-footer.has-tabs {
-  bottom: 49px; }
+  bottom: 56px; }
   .has-tabs.pane,
   .bar-footer.has-tabs.pane {
-    bottom: 49px;
+    bottom: 56px;
     height: auto; }
 
 .bar-subfooter.has-tabs {
-  bottom: 93px; }
+  bottom: 100px; }
 
 .has-footer.has-tabs {
-  bottom: 93px; }
+  bottom: 100px; }
 
 .pane {
   -webkit-transform: translate3d(0, 0, 0);
@@ -1260,11 +1260,11 @@ a.subdued {
   bottom: 0;
   z-index: 5;
   width: 100%;
-  height: 49px;
+  height: 56px;
   border-style: solid;
   border-top-width: 1px;
   background-size: 0;
-  line-height: 49px; }
+  line-height: 56px; }
   .tabs .tab-item .badge {
     background-color: #444;
     color: #f8f8f8; }
@@ -2063,7 +2063,7 @@ ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs
     .tabs-icon-right > .tabs .tab-item .icon:before,
     .tabs-icon-right > .tabs .tab-item .tab-title:before {
       font-size: 24px;
-      line-height: 49px; }
+      line-height: 56px; }
 
 .tabs-icon-left > .tabs .tab-item .icon,
 .tabs-icon-left.tabs .tab-item .icon {
@@ -2154,66 +2154,7 @@ ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs
   top: 0; }
 
 .pane[hide-nav-bar="true"] .has-tabs-top {
-  top: 49px; }
-
-/**
- * Menus
- * --------------------------------------------------
- * Side panel structure
- */
-.menu {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  z-index: 0;
-  overflow: hidden;
-  min-height: 100%;
-  max-height: 100%;
-  width: 275px;
-  background-color: #fff; }
-  .menu .scroll-content {
-    z-index: 10; }
-  .menu .bar-header {
-    z-index: 11; }
-
-.menu-content {
-  -webkit-transform: none;
-  transform: none;
-  box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.2), 1px 0px 2px rgba(0, 0, 0, 0.2); }
-
-.menu-open .menu-content .pane,
-.menu-open .menu-content .scroll-content {
-  pointer-events: none; }
-
-.menu-open .menu-content .scroll-content .scroll {
-  pointer-events: none; }
-
-.menu-open .menu-content .scroll-content:not(.overflow-scroll) {
-  overflow: hidden; }
-
-.grade-b .menu-content,
-.grade-c .menu-content {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-  right: -1px;
-  left: -1px;
-  border-right: 1px solid #ccc;
-  border-left: 1px solid #ccc;
-  box-shadow: none; }
-
-.menu-left {
-  left: 0; }
-
-.menu-right {
-  right: 0; }
-
-.aside-open.aside-resizing .menu-right {
-  display: none; }
-
-.menu-animated {
-  -webkit-transition: -webkit-transform 200ms ease;
-  transition: transform 200ms ease; }
+  top: 56px; }
 
 /**
  * Modals
@@ -2265,9 +2206,9 @@ ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs
   .platform-ios.platform-cordova .modal-wrapper .modal .has-subheader {
     top: 88px; }
   .platform-ios.platform-cordova .modal-wrapper .modal .has-header.has-tabs-top {
-    top: 93px; }
+    top: 100px; }
   .platform-ios.platform-cordova .modal-wrapper .modal .has-header.has-subheader.has-tabs-top {
-    top: 137px; }
+    top: 144px; }
   .modal-backdrop-bg {
     -webkit-transition: opacity 300ms ease-in-out;
     transition: opacity 300ms ease-in-out;
@@ -5218,10 +5159,10 @@ a.button {
   top: 108px; }
 
 .platform-ios.platform-cordova:not(.fullscreen) .has-header.has-tabs-top {
-  top: 113px; }
+  top: 120px; }
 
 .platform-ios.platform-cordova:not(.fullscreen) .has-header.has-subheader.has-tabs-top {
-  top: 157px; }
+  top: 164px; }
 
 .platform-ios.platform-cordova .popover .bar-header:not(.bar-subheader) {
   height: 44px; }
