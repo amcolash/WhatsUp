@@ -183,10 +183,12 @@ angular.module('app.controllers', [])
 
   $scope.googleAuth;
   $scope.facebookAuth;
+  $scope.twitterAuth;
 
   $scope.updateProviders = function (init) {
     $scope.googleAuth = undefined;
     $scope.facebookAuth = undefined;
+    $scope.twitterAuth = undefined;
 
     var providerData = $scope.auth.$getAuth().providerData;
     for (var i = 0; i < providerData.length; i++) {
@@ -194,6 +196,8 @@ angular.module('app.controllers', [])
         $scope.googleAuth = providerData[i];
       } else if (providerData[i].providerId === "facebook.com") {
         $scope.facebookAuth = providerData[i];
+      } else if (providerData[i].providerId === "twitter.com") {
+        $scope.twitterAuth = providerData[i];
       }
     }
 
@@ -210,16 +214,19 @@ angular.module('app.controllers', [])
       var id = $scope.googleAuth.providerId;
     } else if (authMethod === "facebook") {
       var id = $scope.facebookAuth.providerId;
+    } else if (authMethod === "twitter") {
+      var id = $scope.twitterAuth.providerId;
     }
 
-    $scope.auth.$getAuth().unlink(id).then(function (result) {
-      console.log("Success unlinking: " + authMethod);
-      $scope.updateProviders();
-    }).catch(function (error) {
-      console.error("Error: " + JSON.stringify(error));
-      $scope.updateProviders();
-    });
-
+    if (id) {
+      $scope.auth.$getAuth().unlink(id).then(function (result) {
+        console.log("Success unlinking: " + authMethod);
+        $scope.updateProviders();
+      }).catch(function (error) {
+        console.error("Error: " + JSON.stringify(error));
+        $scope.updateProviders();
+      });
+    }
   }
 
   $scope.link = function (authMethod) {

@@ -14,14 +14,21 @@
 
       <div class="inset-button">
         <button class="button button-block icon-left icon-facebook button-positive" ng-click="$parent.facebookAuth ? unlink('facebook') : link('facebook')"
-          ng-disabled="!$parent.googleAuth && $parent.facebookAuth">
+          ng-disabled="!$parent.googleAuth && $parent.facebookAuth && !$parent.twitterAuth">
           <span class="span-button">{{$parent.facebookAuth ? "Disconnect" : "Connect"}} Facebook Account</span>
+        </button>
+      </div>
+
+      <div class="inset-button">
+        <button class="button button-block icon-left icon-twitter button-calm" ng-click="$parent.twitterAuth ? unlink('twitter') : link('twitter')"
+          ng-disabled="!$parent.googleAuth && !$parent.facebookAuth && $parent.twitterAuth">
+          <span class="span-button">{{$parent.twitterAuth ? "Disconnect" : "Connect"}} Twitter Account</span>
         </button>
       </div>
       
       <div class="inset-button">
         <button class="button button-block icon-left icon-google button-assertive" ng-click="$parent.googleAuth ? unlink('google') : link('google')"
-          ng-disabled="$parent.googleAuth && !$parent.facebookAuth">
+          ng-disabled="$parent.googleAuth && !$parent.facebookAuth && !$parent.twitterAuth">
           <span class="span-button">{{$parent.googleAuth ? "Disconnect" : "Connect"}} Google Account</span>
         </button>
       </div>
