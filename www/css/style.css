@@ -13,8 +13,17 @@
 }
 
 /* Tab Stuff */
-.tabs {
-  padding-top: 8px;
+.tab-item {
+  padding-top: 6px;
+}
+
+.tab-item .icon {
+  padding-bottom: 2px;
+  height: auto;
+}
+
+.icon-list {
+  font-size: 28px;
 }
 
 /* Map */
@@ -40,13 +49,17 @@ ng-map {
   border-radius: 3px;
 }
 
+/* Inset button */
+.inset-button {
+  width: 100%;
+  padding: 0 10px;
+}
+
 /* Logout Button */
 
 #logout {
   position: fixed;
   bottom: 20px;
-  width: 100%;
-  padding: 0 10px;
 }
 
 /* Darker card shadows */

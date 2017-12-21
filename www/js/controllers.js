@@ -168,8 +168,8 @@ angular.module('app.controllers', [])
     }
 }])
 
-.controller('SettingsController', ['$ionicHistory', '$ionicPopup', '$scope', '$state', 'Auth', 'EventList', 'NgMap', 'Settings',
-    function($ionicHistory, $ionicPopup, $scope, $state, Auth, EventList, NgMap, Settings) {
+.controller('SettingsController', ['$ionicHistory', '$ionicPopup', '$scope', '$state', 'Auth', 'Credentials', 'EventList', 'NgMap', 'Settings',
+    function($ionicHistory, $ionicPopup, $scope, $state, Auth, Credentials, EventList, NgMap, Settings) {
   Settings.then(function(data) {
     data.$bindTo($scope, "settings").then(function(unbind) {
       $scope.$on('$ionicView.beforeLeave', function() {
@@ -177,6 +177,89 @@ angular.module('app.controllers', [])
       })
     });
   });
+
+  $scope.auth = Auth;
+  $scope.credentials = Credentials;
+
+  $scope.googleAuth;
+  $scope.facebookAuth;
+
+  $scope.updateProviders = function (init) {
+    $scope.googleAuth = undefined;
+    $scope.facebookAuth = undefined;
+
+    var providerData = $scope.auth.$getAuth().providerData;
+    for (var i = 0; i < providerData.length; i++) {
+      if (providerData[i].providerId === "google.com") {
+        $scope.googleAuth = providerData[i];
+      } else if (providerData[i].providerId === "facebook.com") {
+        $scope.facebookAuth = providerData[i];
+        console.log(providerData)
+      }
+    }
+
+    if (!init) {
+      $scope.$apply();
+    }
+  }
+
+  // Do this after the function is defined
+  $scope.updateProviders(true);
+
+  $scope.unlink = function (authMethod) {
+    if (authMethod === "google") {
+      var id = $scope.googleAuth.providerId;
+    } else if (authMethod === "facebook") {
+      var id = $scope.facebookAuth.providerId;
+    }
+
+    $scope.auth.$getAuth().unlink(id).then(function (result) {
+      console.log("Success unlinking: " + authMethod);
+      $scope.updateProviders();
+    }).catch(function (error) {
+      console.error("Error: " + JSON.stringify(error));
+      $scope.updateProviders();
+    });
+
+  }
+
+  $scope.link = function (authMethod) {
+    console.log($scope.auth)
+
+    $scope.credentials(authMethod).then(function (credential) {
+      if (ionic.Platform.isAndroid() && window.cordova) {
+        $scope.auth.$getAuth().link(credential).then(function (result) {
+          console.log("Success linking: " + authMethod);
+          $scope.updateProviders();
+        }).catch(function (error) {
+          console.error("Error: " + JSON.stringify(error));
+          $scope.updateProviders();
+        });
+      } else {
+        $scope.auth.$getAuth().linkWithPopup(credential).then(function (result) {
+          console.log("Success linking: " + authMethod);
+          $scope.updateProviders();
+        }).catch(function (error) {
+          console.error("Error: " + JSON.stringify(error));
+          $scope.updateProviders();
+        });
+      }
+    }, function (error) {
+      console.error("Error: " + JSON.stringify(error));
+      $scope.updateProviders();
+    })
+  }
+
+  // Needed to get the autocomplete working
+  $scope.disableTap = function () {
+    container = document.getElementsByClassName('pac-container');
+    // disable ionic data tab
+    angular.element(container).attr('data-tap-disabled', 'true');
+    // leave input field if google-address-entry is selected
+    angular.element(container).on("click", function () {
+      document.getElementById('autocomplete').blur();
+    });
+  }
 
   $scope.clearLocation = function() {
     $scope.settings.location = {};

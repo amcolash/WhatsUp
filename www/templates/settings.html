@@ -2,17 +2,30 @@
   <ion-content class="has-header">
     <div class="list">
       <div class="list list-inset">
-        <ion-toggle ng-model="$parent.settings.test" toggle-class="toggle-calm">TEST</ion-toggle>
 
         <div class="item item-input">
           <span class="input-label">My Location</span>
-          <input type="text" placeholder="(Using GPS)" places-auto-complete size=80 ng-model="$parent.settings.locationFriendly" on-place-changed="placeChanged()">
+          <input type="text" placeholder="(Using GPS)" places-auto-complete ng-focus="disableTap()" ng-model="$parent.settings.locationFriendly" on-place-changed="placeChanged()">
           <button id="clearButton" class="button-icon input-button icon-cross placeholder-icon hover padding-right"
           ng-show="$parent.settings.locationFriendly.length > 0" ng-click="clearLocation()"></button>
         </div>
       </div>
 
-      <div id="logout">
+      <div class="inset-button">
+        <button class="button button-block icon-left icon-facebook button-positive" ng-click="$parent.facebookAuth ? unlink('facebook') : link('facebook')"
+          ng-disabled="!$parent.googleAuth && $parent.facebookAuth">
+          <span class="span-button">{{$parent.facebookAuth ? "Disconnect" : "Connect"}} Facebook Account</span>
+        </button>
+      </div>
+      
+      <div class="inset-button">
+        <button class="button button-block icon-left icon-google button-assertive" ng-click="$parent.googleAuth ? unlink('google') : link('google')"
+          ng-disabled="$parent.googleAuth && !$parent.facebookAuth">
+          <span class="span-button">{{$parent.googleAuth ? "Disconnect" : "Connect"}} Google Account</span>
+        </button>
+      </div>
+
+      <div id="logout" class="inset-button">
         <button type="button" class="button button-block icon-exit button-assertive" ng-click="signOut()">
           <span class="span-button">Logout</span>
         </button>
