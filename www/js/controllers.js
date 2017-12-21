@@ -194,7 +194,6 @@ angular.module('app.controllers', [])
         $scope.googleAuth = providerData[i];
       } else if (providerData[i].providerId === "facebook.com") {
         $scope.facebookAuth = providerData[i];
-        console.log(providerData)
       }
     }
 

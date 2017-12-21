@@ -56,12 +56,18 @@ ng-map {
 }
 
 /* Logout Button */
-
 #logout {
   position: fixed;
   bottom: 20px;
 }
 
+/* Using GPS Location Icon */
+#custom-location-icon {
+  color: #387ef5;
+  padding-right: 4px;
+  padding-top: 2px;
+  font-size: 20px;
+}
 /* Darker card shadows */
 .card {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);

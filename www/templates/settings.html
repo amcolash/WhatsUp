@@ -5,6 +5,7 @@
 
         <div class="item item-input">
           <span class="input-label">My Location</span>
+          <i ng-if="!$parent.settings.locationFriendly" id="custom-location-icon" class="icon icon-location"></i>
           <input type="text" placeholder="(Using GPS)" places-auto-complete ng-focus="disableTap()" ng-model="$parent.settings.locationFriendly" on-place-changed="placeChanged()">
           <button id="clearButton" class="button-icon input-button icon-cross placeholder-icon hover padding-right"
           ng-show="$parent.settings.locationFriendly.length > 0" ng-click="clearLocation()"></button>
