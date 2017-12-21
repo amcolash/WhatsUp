@@ -14,24 +14,30 @@ angular.module('app.controllers', [])
   $scope.credentials = Credentials;
 
   $scope.login = function (authMethod) {
-    $scope.credentials(authMethod).then(function (credentials) {
-      if (ionic.Platform.isAndroid() && window.cordova) {
-        $scope.auth.$signInWithCredential(credentials);
-      } else {
-        $scope.auth.$signInWithPopup(credentials).catch(function(error) {
-          console.error("Error: " + JSON.stringify(error));
+    if (authMethod === "anonymous") {
+      $scope.auth.$signInAnonymously().catch(function (error) {
+        console.error("Error: " + JSON.stringify(error));
+      });
+    } else {
+      $scope.credentials(authMethod).then(function (credentials) {
+        if (ionic.Platform.isAndroid() && window.cordova) {
+          $scope.auth.$signInWithCredential(credentials);
+        } else {
+          $scope.auth.$signInWithPopup(credentials).catch(function(error) {
+            console.error("Error: " + JSON.stringify(error));
 
-          if (error.code && error.code === "auth/account-exists-with-different-credential") {
-            $ionicPopup.alert({
-              title: 'Existing Account',
-              template: 'It looks like you made an account with a different sign-in method, please login with that user account instead.'
-            });
-          }
-        });
-      }
-    }, function (error) {
-      console.error("Error: " + JSON.stringify(error));
-    })
+            if (error.code && error.code === "auth/account-exists-with-different-credential") {
+              $ionicPopup.alert({
+                title: 'Existing Account',
+                template: 'It looks like you made an account with a different sign-in method, please login with that user account instead.'
+              });
+            }
+          });
+        }
+      }, function (error) {
+        console.error("Error: " + JSON.stringify(error));
+      });
+    }
   };
 }])
 
@@ -295,6 +301,12 @@ angular.module('app.controllers', [])
     confirmPopup.then(function (res) {
       if (res) {
         Auth.$signOut();
+
+        // Clean up state
+        EventList.reset();
+        $scope.settings.gpsFailed = false;
+        $ionicHistory.clearCache();
+        $ionicHistory.clearHistory();
       }
     });
   }
