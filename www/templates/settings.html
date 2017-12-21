@@ -33,6 +33,10 @@
         </button>
       </div>
 
+      <div id="account-warning" class="bar bar-assertive" ng-if="!$parent.googleAuth && !$parent.facebookAuth && !$parent.twitterAuth">
+        <span class="title">WARNING: Your account has not been linked to a social media account. If you log out, all user data will be lost!</span>
+      </div>
+
       <div id="logout" class="inset-button">
         <button type="button" class="button button-block icon-exit button-assertive" ng-click="signOut()">
           <span class="span-button">Logout</span>

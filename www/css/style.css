@@ -51,6 +51,16 @@ ng-map {
   padding: 0 10px;
 }
 
+/* Account warning */
+#account-warning {
+  position: fixed;
+  bottom: 100px;
+}
+
+#account-warning span {
+  font-weight: bold;
+}
+
 /* Logout Button */
 #logout {
   position: fixed;

@@ -293,20 +293,23 @@ angular.module('app.controllers', [])
 
   // not worrying about errors right now
   $scope.signOut = function () {
+    var warning = (!$scope.googleAuth && !$scope.facebookAuth && !$scope.twitterAuth) ?
+      "WARNING: Your account has not been linked to a social media account. If you log out, all user data will be lost!" : "";
+
     var confirmPopup = $ionicPopup.confirm({
       title: 'Log Out',
-      template: 'Are you sure you want to log out?'
+      template: 'Are you sure you want to log out? ' + warning
     });
 
     confirmPopup.then(function (res) {
       if (res) {
-        Auth.$signOut();
-
         // Clean up state
         EventList.reset();
         $scope.settings.gpsFailed = false;
         $ionicHistory.clearCache();
         $ionicHistory.clearHistory();
+
+        Auth.$signOut();
       }
     });
   }
