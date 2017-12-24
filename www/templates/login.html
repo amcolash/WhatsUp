@@ -11,7 +11,8 @@
       <button class="button button-block button-dark" ng-click="auth.$signOut()">Logout</button>
     </div>
     <div class="list list-inset" ng-hide="auth.authData">
-      <h1 class="text-center padding">Welcome to {{appName}}! Please log in to start.</h1>
+      <h1 class="text-center padding">Welcome to {{appName}}!</h1>
+      <h3 class="text-center">Please log in to get started.</h3>
       <br>
       <button class="button button-block icon-left icon-facebook button-positive" ng-click="$parent.login('facebook')"><span class="span-button"> Login With Facebook</span></button>
       <button class="button button-block icon-left icon-twitter button-calm" ng-click="$parent.login('twitter')"><span class="span-button">Login With Twitter</span></button>
