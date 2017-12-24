@@ -70,7 +70,7 @@ angular.module('app.event', [])
         var url = meetupEvent.link;
         var startTime = meetupEvent.time;
         var endTime = meetupEvent.time + meetupEvent.duration;
-        var icon = "icon-users";
+        var icon = "icon-meetup";
         var source = "meetup";
         var category;
         var isFree = meetupEvent.fee === undefined;
@@ -82,6 +82,10 @@ angular.module('app.event', [])
 
         if (meetupEvent.featured_photo) {
             var picture = meetupEvent.featured_photo.thumb_link;
+        }
+
+        if (!picture && meetupEvent.group.photo) {
+            var picture = meetupEvent.group.photo.thumb_link;
         }
 
         if (meetupEvent.venue) {
@@ -106,7 +110,7 @@ angular.module('app.event', [])
         var url = eventbriteEvent.url;
         var startTime = eventbriteEvent.start.utc;
         var endTime = eventbriteEvent.end.utc;
-        var icon = "icon-ticket";
+        var icon = "icon-eventbrite";
         var source = "eventbrite";
         var category;
         var isFree = eventbriteEvent.is_free;
