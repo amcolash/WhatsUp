@@ -7,7 +7,9 @@ angular.module('app.event', [])
         // Loosely Required
         this.id = id;
         this.name = name;
-        this.description = description;
+        if (description) {
+            this.description = description.replace(/\n+/g, "\n");
+        }
         this.url = url;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -66,7 +68,7 @@ angular.module('app.event', [])
     Event.convertMeetupEvent = function (meetupEvent, position) {
         var id = "meetup" + meetupEvent.id;
         var name = meetupEvent.group.name + " - " + meetupEvent.name;
-        var description = meetupEvent.description;
+        var description = meetupEvent.plain_text_no_images_description;
         var url = meetupEvent.link;
         var startTime = meetupEvent.time;
         var endTime = meetupEvent.time + meetupEvent.duration;

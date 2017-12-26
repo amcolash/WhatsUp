@@ -116,7 +116,7 @@ angular.module('app.eventList', [])
   function meetupPromise(config) {
     // meetup events
     return new Promise(function (resolve, reject) {
-      var url = "https://api.meetup.com/find/upcoming_events?sign=true&photo-host=public&fields=featured_photo,group_photo,group_category&lat="
+      var url = "https://api.meetup.com/find/upcoming_events?sign=true&photo-host=public&fields=featured_photo,group_photo,group_category,plain_text_no_images_description&lat="
         + config.position.lat + "&lon=" + config.position.lng + "&page=" + config.maxEvents + "&end_date_range="
         + config.endTime.toISOStringCustom() + "&callback=JSON_CALLBACK&radius=" + config.distance + "&key=" + keys.meetupSecret;
 

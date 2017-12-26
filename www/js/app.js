@@ -171,6 +171,16 @@ var ionicApp = angular.module('app', [
       }
     })
 
+    .state('app.myEvents', {
+      url: '/myevents',
+      views: {
+        'myEvents-tab': {
+          templateUrl: 'templates/myEvents.html',
+          controller: 'MyEventsController'
+        }
+      }
+    })
+
     .state('app.map', {
       url: '/map',
       views: {

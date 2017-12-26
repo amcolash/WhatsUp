@@ -98,6 +98,11 @@ angular.module('app.controllers', [])
   };
 }])
 
+  .controller('MyEventsController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', 'EventList', 'Settings',
+    function ($geolocation, $ionicLoading, $ionicPopup, $scope, EventList, Settings) {
+      
+  }])
+
 .controller('MapController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', '$timeout', 'EventList', 'NgMap', 'Settings',
   function ($geolocation, $ionicLoading, $ionicPopup, $scope, $timeout, EventList, NgMap, Settings) {
 

@@ -1,5 +1,7 @@
 <ion-view title="My Events">
     <ion-content class="has-header">
-        
+        <div ng-repeat="event in events" ng-show="([event] | upcomingFilter).length">
+            <ng-include src="'templates/eventCard.html'"></ng-include>
+        </div>
     </ion-content>
 </ion-view>
