@@ -31,52 +31,7 @@
     </div>
 
     <div ng-repeat="event in events" ng-show="([event] | filter:searchText | categoryFilter:selectedCategory | upcomingFilter).length">
-      <div class="list card">
-        <div class="item item-avatar">
-          <img ng-src="{{event.picture}}" src="img/event.png">
-          <i ng-class="event.icon"></i>
-          <a target="_blank" href="{{event.url}}">
-            <span>{{event.name}}</span>
-            <i ng-if="!event.isFree" class="icon icon-coin-dollar"></i>
-          </a>
-
-          <p>
-            <div>
-              <span class="icon icon-map2"></span>
-              <span ng-if="event.location">
-                <a target="_blank" href="https://maps.google.com/?q={{event.location | locationMap}}">
-                  {{event.location | location}}
-                </a>
-              </span>
-              <span ng-if="!event.location">
-                No location speficied, check the event page
-              </span>
-            </div>
-
-            {{event.startTime | date:'MMMM d, hh:mm a'}} <span ng-if="event.endTime">- {{event.endTime | date:'MMMM d, hh:mm a'}}</span>
-          </p>
-        </div>
-      
-        <div class="item item-body">
-          <p>
-            <hm-read-more hm-text="{{event.description}}" hm-limit="250" hm-more-text="▼ more" hm-less-text="▲ less"></hm-read-more>
-          </p>
-          <p class="subdued">
-            <span ng-if="event.location.distance">{{event.location.distance | metersToMiles}} miles away</span>
-            
-            <span ng-if="event.attending">
-              <span ng-if="event.location.distance">|</span>
-              {{event.attending}} people going
-            </span>
-
-            <span ng-if="event.category">
-              <span ng-if="event.location.distance || event.attending">|</span>
-              {{event.category}}
-            </span>
-          </p>
-        </div>
-      
-      </div>
+      <ng-include src="'templates/eventCard.html'"></ng-include>
     </div>
 
   </ion-content>
