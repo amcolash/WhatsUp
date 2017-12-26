@@ -10,6 +10,7 @@
     "ng-cordova-oauth": "^0.3.0",
     "angular-read-more": "^1.0.6",
     "ngGeolocation": "^0.0.8",
-    "ngmap": "^1.18.4"
+    "ngmap": "^1.18.4",
+    "geofire": "^4.1.2"
   }
 }
