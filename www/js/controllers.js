@@ -124,6 +124,7 @@ angular.module('app.controllers', [])
         startTime: new Date(),
         endTime: new Date(),
         category: "Other",
+        location: { name: "Test Location" }
       };
       $scope.modal.show();
     };
