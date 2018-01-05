@@ -72,10 +72,11 @@ angular.module('app.factories', [])
 }])
 
 .factory('CustomEvents', ['Auth', '$firebaseObject', function (Auth, $firebaseObject) {
-  var ref = firebase.database().ref('events/').limitToLast(10);
+  var ref = firebase.database().ref('events/').orderByChild('creator').equalTo(Auth.$getAuth().uid);
   return $firebaseObject(ref).$loaded();
 }])
 
+// Use for favorites I think
 .factory('MyEvents', ['Auth', '$firebaseArray', function (Auth, $firebaseArray) {
   var ref = firebase.database().ref('users/' + Auth.$getAuth().uid + '/myevents');
   return $firebaseArray(ref).$loaded();

@@ -98,14 +98,10 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('MyEventsController', ['$geolocation', '$ionicModal', '$scope', 'CustomEvents', 'Event', 'EventList', 'MyEvents',
-  function ($geolocation, $ionicModal, $scope, CustomEvents, Event, EventList, MyEvents) {
+.controller('MyEventsController', ['$firebaseObject', '$geolocation', '$ionicModal', '$scope', 'Auth', 'CustomEvents', 'Event', 'EventList', 'MyEvents',
+  function ($firebaseObject, $geolocation, $ionicModal, $scope, Auth, CustomEvents, Event, EventList, MyEvents) {
     CustomEvents.then(function(data) {
-      $scope.customEvents = data;
-    });
-
-    MyEvents.then(function (data) {
-      $scope.myEvents = data;
+      $scope.events = data;
     });
 
     $scope.newEvent = {};
@@ -155,19 +151,20 @@ angular.module('app.controllers', [])
       var location = "";
 
       var event = new Event(id, name, description, url, startTime, endTime, icon, source, category, cost, attending, picture, location);
-
-      // Add to user events
-      $scope.myEvents.$add(event.id);
+      event.creator = Auth.$getAuth().uid;
+      event.startTimezone = $scope.newEvent.startTime.getTimezoneOffset();
+      event.endTimezone = $scope.newEvent.endTime.getTimezoneOffset();
 
       // Add to custom event list
-      $scope.customEvents[event.id] = event;
-      $scope.customEvents.$save();
+      $scope.events[event.id] = event;
+      $scope.events.$save();
 
       $scope.closeModal();
     }
 
     $scope.removeEvent = function(event) {
-      $scope.myEvents.$remove(event);
+      $scope.events[event.id] = {};
+      $scope.events.$save();
     }
 }])
 

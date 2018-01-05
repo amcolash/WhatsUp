@@ -42,5 +42,10 @@
                 {{event.category}}
             </span>
         </p>
+
+        <div ng-if="event.creator">
+            <button ng-click="editEvent(event)">Edit</button>
+            <button ng-click="removeEvent(event)">X</button>
+        </div>
     </div>
 </div>
