@@ -29,6 +29,15 @@
   }
 }
 
+/* Form validation */
+.ng-invalid:not(form) {
+  border-bottom: 2px solid #d32424;
+}
+
+.item-input input, .item-input textarea {
+  margin-right: 4px;
+}
+
 /* Padding all over and weird issues with sizing! */
 .item-input textarea {
   width: 66%;
