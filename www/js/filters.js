@@ -21,6 +21,8 @@ angular.module('app.filters', [])
         if (input.state) loc += (loc.length > 0 ? ", " : "") + input.state;
         if (input.zip) loc += (loc.length > 0 ? " " : "") + input.zip;
 
+        if (input.name && loc.length == 0) loc = input.name;
+
         return loc;
     }
 })
@@ -34,7 +36,11 @@ angular.module('app.filters', [])
         if (input.state) loc += (loc.length > 0 ? ", " : "") + input.state;
         if (input.zip) loc += (loc.length > 0 ? " " : "") + input.zip;
         
-        if (input.name) loc = input.name + " (" + loc + ")";
+        if (input.name && loc.length > 0) {
+            loc = input.name + " (" + loc + ")";
+        } else {
+            loc = input.name;
+        }
 
         return loc;
     }

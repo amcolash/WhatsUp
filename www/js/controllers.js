@@ -134,6 +134,27 @@ angular.module('app.controllers', [])
     $scope.$on('$destroy', function () {
       $scope.modal.remove();
     });
+
+    // Needed to get the autocomplete working
+    $scope.disableTap = function () {
+      container = document.getElementsByClassName('pac-container');
+      // disable ionic data tab
+      angular.element(container).attr('data-tap-disabled', 'true');
+      angular.element(container).css('pointer-events', 'auto');
+      // leave input field if google-address-entry is selected
+      angular.element(container).on("click", function () {
+        document.getElementById('autocomplete').blur();
+      });
+    }
+
+    $scope.clearLocation = function () {
+      $scope.newEvent.location = {};
+    }
+
+    $scope.placeChanged = function () {
+      $scope.newEvent.location.lat = this.getPlace().geometry.location.lat();
+      $scope.newEvent.location.lng = this.getPlace().geometry.location.lng();
+    }
     
     $scope.createEvent = function() {
       var id = "custom_" + UUIDjs.create();
@@ -148,7 +169,7 @@ angular.module('app.controllers', [])
       var cost = 0;
       var attending = 0;
       var picture = "";
-      var location = "";
+      var location = $scope.newEvent.location;
 
       var event = new Event(id, name, description, url, startTime, endTime, icon, source, category, cost, attending, picture, location);
       event.creator = Auth.$getAuth().uid;
@@ -337,6 +358,7 @@ angular.module('app.controllers', [])
     container = document.getElementsByClassName('pac-container');
     // disable ionic data tab
     angular.element(container).attr('data-tap-disabled', 'true');
+    angular.element(container).css('pointer-events', 'auto');
     // leave input field if google-address-entry is selected
     angular.element(container).on("click", function () {
       document.getElementById('autocomplete').blur();
