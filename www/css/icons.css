@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('../fonts/icomoon.eot?l7a3s9');
-  src:  url('../fonts/icomoon.eot?l7a3s9#iefix') format('embedded-opentype'),
-    url('../fonts/icomoon.ttf?l7a3s9') format('truetype'),
-    url('../fonts/icomoon.woff?l7a3s9') format('woff'),
-    url('../fonts/icomoon.svg?l7a3s9#icomoon') format('svg');
+  src:  url('../fonts/icomoon.eot?yc6qrq');
+  src:  url('../fonts/icomoon.eot?yc6qrq#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?yc6qrq') format('truetype'),
+    url('../fonts/icomoon.woff?yc6qrq') format('woff'),
+    url('../fonts/icomoon.svg?yc6qrq#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -41,6 +41,9 @@
 }
 .icon-meetup:before {
   content: "\e903";
+}
+.icon-pencil:before {
+  content: "\e906";
 }
 .icon-ticket:before {
   content: "\e939";
@@ -81,8 +84,14 @@
 .icon-star-full:before {
   content: "\e9d9";
 }
+.icon-plus:before {
+  content: "\ea0a";
+}
 .icon-cross:before {
   content: "\ea0f";
+}
+.icon-checkmark:before {
+  content: "\ea10";
 }
 .icon-exit:before {
   content: "\ea14";

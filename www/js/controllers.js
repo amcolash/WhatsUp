@@ -98,10 +98,78 @@ angular.module('app.controllers', [])
   };
 }])
 
-  .controller('MyEventsController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', 'EventList', 'Settings',
-    function ($geolocation, $ionicLoading, $ionicPopup, $scope, EventList, Settings) {
-      
-  }])
+.controller('MyEventsController', ['$geolocation', '$ionicModal', '$scope', 'CustomEvents', 'Event', 'EventList', 'MyEvents',
+  function ($geolocation, $ionicModal, $scope, CustomEvents, Event, EventList, MyEvents) {
+    CustomEvents.then(function(data) {
+      $scope.customEvents = data;
+    });
+
+    MyEvents.then(function (data) {
+      $scope.myEvents = data;
+    });
+
+    $scope.newEvent = {};
+    $scope.categoryList = ["Business", "Crafts", "Dance", "Family & Education", "Film & Media",
+      "Fitness", "Food & Drink", "Health", "Music", "Other", "Science & Tech", "Theater", "Travel & Outdoor"];
+
+    $ionicModal.fromTemplateUrl('templates/newEvent.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.modal = modal;
+    }).catch(function (error) {
+      console.error(error);
+    });
+
+    $scope.openModal = function () {
+      $scope.newEvent = {
+        name: "New Event",
+        description: "Event Description",
+        startTime: new Date(),
+        endTime: new Date(),
+        category: "Other",
+      };
+      $scope.modal.show();
+    };
+    $scope.closeModal = function () {
+      $scope.modal.hide();
+    };
+    // Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function () {
+      $scope.modal.remove();
+    });
+    
+    $scope.createEvent = function() {
+      var id = "custom_" + UUIDjs.create();
+      var name = $scope.newEvent.name;
+      var description = $scope.newEvent.description;
+      var url = "url";
+      var startTime = $scope.newEvent.startTime.getTime();
+      var endTime = $scope.newEvent.endTime.getTime();
+      var icon = "icon-users";
+      var source = "custom";
+      var category = $scope.newEvent.category;
+      var cost = 0;
+      var attending = 0;
+      var picture = "";
+      var location = "";
+
+      var event = new Event(id, name, description, url, startTime, endTime, icon, source, category, cost, attending, picture, location);
+
+      // Add to user events
+      $scope.myEvents.$add(event.id);
+
+      // Add to custom event list
+      $scope.customEvents[event.id] = event;
+      $scope.customEvents.$save();
+
+      $scope.closeModal();
+    }
+
+    $scope.removeEvent = function(event) {
+      $scope.myEvents.$remove(event);
+    }
+}])
 
 .controller('MapController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', '$timeout', 'EventList', 'NgMap', 'Settings',
   function ($geolocation, $ionicLoading, $ionicPopup, $scope, $timeout, EventList, NgMap, Settings) {

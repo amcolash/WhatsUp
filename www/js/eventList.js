@@ -8,7 +8,7 @@ angular.module('app.eventList', [])
     var promise = new Promise(function (resolve, reject) {
     
       if (eventList.data) {
-        console.log("using cached data")
+        console.log("using cached data");
         resolve(eventList.data);
       }
 
@@ -57,7 +57,7 @@ angular.module('app.eventList', [])
             }
           }
         }
-        if (logEvents) console.log("trimmed " + trimmed + " long events");
+        if (logEvents) console.log("trimmed " + trimmed + " events longer than 3 days");
 
         events.sort(function(a, b) {
           return new Date(a.startTime) - new Date(b.startTime);
@@ -69,6 +69,8 @@ angular.module('app.eventList', [])
         }
         categories.push("All");
         categories.sort();
+
+        console.log(categories);
 
         eventList.data = { events, categories, position };
 

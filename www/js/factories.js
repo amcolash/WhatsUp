@@ -66,24 +66,17 @@ angular.module('app.factories', [])
 }])
 
 
-// The below factories have deferred promises because we need to wait for a uid first
 .factory('Settings', ['Auth', '$firebaseObject', function(Auth, $firebaseObject) {
-  var promise = new Promise(function (resolve, reject) {
+  var ref = firebase.database().ref('users/' + Auth.$getAuth().uid + '/settings');
+  return $firebaseObject(ref).$loaded();
+}])
 
-    Auth.$onAuthStateChanged(function(authData) {
-      if (authData && authData.uid) {
-        var ref = firebase.database().ref('users/' + authData.uid + '/settings');
-        var settings = $firebaseObject(ref);
+.factory('CustomEvents', ['Auth', '$firebaseObject', function (Auth, $firebaseObject) {
+  var ref = firebase.database().ref('events/').limitToLast(10);
+  return $firebaseObject(ref).$loaded();
+}])
 
-        // Need to wait while the object is loaded
-        settings.$loaded().then(function() {
-          resolve(settings);
-        }).catch(function (error) {
-          reject(error);
-        });
-      }
-    });
-  });
-
-  return promise;
+.factory('MyEvents', ['Auth', '$firebaseArray', function (Auth, $firebaseArray) {
+  var ref = firebase.database().ref('users/' + Auth.$getAuth().uid + '/myevents');
+  return $firebaseArray(ref).$loaded();
 }])

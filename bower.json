@@ -11,6 +11,8 @@
     "angular-read-more": "^1.0.6",
     "ngGeolocation": "^0.0.8",
     "ngmap": "^1.18.4",
-    "geofire": "^4.1.2"
+    "geofire": "^4.1.2",
+    "uuid-js": "^0.7.5",
+    "angular-elastic": "^2.5.1"
   }
 }

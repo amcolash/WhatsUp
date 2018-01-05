@@ -4,7 +4,7 @@
         <i ng-class="event.icon"></i>
         <a target="_blank" href="{{event.url}}">
             <span>{{event.name}}</span>
-            <i ng-if="!event.isFree" class="icon icon-coin-dollar"></i>
+            <i ng-if="event.cost > 0" class="icon icon-coin-dollar"></i>
         </a>
 
         <p>

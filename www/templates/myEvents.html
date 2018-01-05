@@ -1,5 +1,16 @@
 <ion-view title="My Events">
     <ion-content class="has-header">
+        <div class="inset-button">
+            <button class="button button-block icon-plus button-positive" ng-click="openModal()">
+                <span class="span-button">New Event</span>
+            </button>
+        </div>
+
+        <div ng-repeat="event in myEvents">
+            <span>{{event}}</span>
+            <button ng-click="removeEvent(event)">X</button>
+        </div>
+
         <div ng-repeat="event in events" ng-show="([event] | upcomingFilter).length">
             <ng-include src="'templates/eventCard.html'"></ng-include>
         </div>

@@ -21,6 +21,25 @@
   color: #387ef5;
 }
 
+/* Round corners on modals */
+@media (min-width: 680px) {
+  .modal {
+    border-radius: 4px;
+    overflow: hidden;
+  }
+}
+
+/* Padding all over and weird issues with sizing! */
+.item-input textarea {
+  width: 66%;
+  padding-right: 24px;
+}
+
+/* Items in list wrap instead of clipping */
+.item {
+  white-space: normal;
+}
+
 /* Tab Stuff */
 .tab-item {
   padding-top: 6px;
