@@ -108,7 +108,7 @@ angular.module('app.controllers', [])
     $scope.categoryList = ["Business", "Crafts", "Dance", "Family & Education", "Film & Media",
       "Fitness", "Food & Drink", "Health", "Music", "Other", "Science & Tech", "Theater", "Travel & Outdoor"];
 
-    $ionicModal.fromTemplateUrl('templates/newEvent.html', {
+    $ionicModal.fromTemplateUrl('templates/editEvent.html', {
       scope: $scope,
       animation: 'slide-in-up'
     }).then(function (modal) {
@@ -117,15 +117,13 @@ angular.module('app.controllers', [])
       console.error(error);
     });
 
-    $scope.openModal = function () {
-      $scope.newEvent = {
-        name: "New Event",
-        description: "Event Description",
-        startTime: new Date(),
-        endTime: new Date(),
-        category: "Other",
-        location: { name: "Test Location" }
-      };
+    $scope.openModal = function (event) {
+      $scope.newEvent = event;
+
+      // Fix the dates - since we go Date (edit) -> ms (firebase) -> Date (edit)
+      $scope.newEvent.startTime = new Date(event.startTime);
+      $scope.newEvent.endTime = new Date(event.endTime);
+
       $scope.modal.show();
     };
     $scope.closeModal = function () {
@@ -135,6 +133,16 @@ angular.module('app.controllers', [])
     $scope.$on('$destroy', function () {
       $scope.modal.remove();
     });
+
+    $scope.dateChanged = function(scope) {
+      var start = scope.form.startTime;
+      var end = scope.form.endTime;
+
+      var valid = $scope.newEvent.startTime.getTime() < $scope.newEvent.endTime.getTime();
+
+      start.$setValidity('invald date', valid);
+      end.$setValidity('invald date', valid);
+    }
 
     // Needed to get the autocomplete working
     $scope.disableTap = function () {
@@ -156,9 +164,26 @@ angular.module('app.controllers', [])
       $scope.newEvent.location.lat = this.getPlace().geometry.location.lat();
       $scope.newEvent.location.lng = this.getPlace().geometry.location.lng();
     }
+
+    $scope.editEvent = function(event) {
+      if (!event) {
+        var now = Math.floor(Date.now() / 60000) * 60000; // Take out the seconds-ish
+        event = {
+          name: "New Event",
+          description: "Event Description",
+          startTime: new Date(now),
+          endTime: new Date(now + 60 * 1000),
+          category: "Other",
+          location: { name: "Test Location" },
+          newEvent: true
+        };
+      }
+
+      $scope.openModal(event);
+    }
     
     $scope.createEvent = function() {
-      var id = "custom_" + UUIDjs.create();
+      var id = $scope.newEvent.id || "custom_" + UUIDjs.create();
       var name = $scope.newEvent.name;
       var description = $scope.newEvent.description;
       var url = "url";
@@ -176,6 +201,7 @@ angular.module('app.controllers', [])
       event.creator = Auth.$getAuth().uid;
       event.startTimezone = $scope.newEvent.startTime.getTimezoneOffset();
       event.endTimezone = $scope.newEvent.endTime.getTimezoneOffset();
+      event.newEvent = false;
 
       // Add to custom event list
       $scope.events[event.id] = event;

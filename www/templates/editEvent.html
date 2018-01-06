@@ -19,12 +19,12 @@
                 
                 <label class="item item-input">
                     <span class="input-label">Start Time</span>
-                    <input type="datetime-local" ng-model="newEvent.startTime" required></input>
+                    <input type="datetime-local" step="60" name="startTime" ng-change="dateChanged(this)" ng-model="newEvent.startTime" required></input>
                 </label>
                 
                 <label class="item item-input">
                     <span class="input-label">End Time</span>
-                    <input type="datetime-local" ng-model="newEvent.endTime" required></input>
+                    <input type="datetime-local" step="60" name="endTime" ng-change="dateChanged(this)" ng-model="newEvent.endTime" required></input>
                 </label>
 
                 <label class="item item-input">
@@ -41,7 +41,8 @@
 
                 <div class="inset-button">
                     <button type="submit" class="button button-block icon-plus button-positive" ng-click="createEvent()" ng-disabled="form.$invalid">
-                        <span class="span-button">Create Event</span>
+                        <span class="span-button padding-left" ng-if="newEvent.newEvent">Create Event</span>
+                        <span class="span-button padding-left" ng-if="!newEvent.newEvent">Edit Event</span>
                     </button>
                 </div>
             </div>
