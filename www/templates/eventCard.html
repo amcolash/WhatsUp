@@ -44,8 +44,13 @@
         </p>
 
         <div ng-if="event.creator">
-            <button ng-click="editEvent(event)">Edit</button>
-            <button ng-click="removeEvent(event)">X</button>
+            <button class="button icon-pencil button-energized" ng-click="editEvent(event)">
+                <span class="span-button">Edit</span>
+            </button>
+            <span class="padding-left"></span>
+            <button class="button icon-cross button-assertive" ng-click="removeEvent(event)">
+                <span class="span-button">Remove</span>
+            </button>
         </div>
     </div>
 </div>
