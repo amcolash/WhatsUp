@@ -98,12 +98,13 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('MyEventsController', ['$firebaseObject', '$geolocation', '$ionicModal', '$scope', 'Auth', 'CustomEvents', 'Event', 'EventList', 'MyEvents',
-  function ($firebaseObject, $geolocation, $ionicModal, $scope, Auth, CustomEvents, Event, EventList, MyEvents) {
+.controller('MyEventsController', ['$firebaseObject', '$geolocation', '$ionicModal', '$scope', 'Auth', 'CustomEvents', 'Event', 'EventList', 'GeoFire', 'MyEvents',
+  function ($firebaseObject, $geolocation, $ionicModal, $scope, Auth, CustomEvents, Event, EventList, GeoFire, MyEvents) {
     CustomEvents.then(function(data) {
       $scope.events = data;
     });
 
+    $scope.geoFireEvents = GeoFire.events;
     $scope.newEvent = {};
     $scope.categoryList = ["Business", "Crafts", "Dance", "Family & Education", "Film & Media",
       "Fitness", "Food & Drink", "Health", "Music", "Other", "Science & Tech", "Theater", "Travel & Outdoor"];
@@ -174,7 +175,7 @@ angular.module('app.controllers', [])
           startTime: new Date(now),
           endTime: new Date(now + 60 * 1000),
           category: "Other",
-          location: { name: "Test Location" },
+          location: { lat: 43.07483209999999, lng: -89.39296050000002, name: "State Street, Madison, WI, United States" },
           newEvent: true
         };
       }
@@ -208,11 +209,15 @@ angular.module('app.controllers', [])
       $scope.events.$save();
 
       $scope.closeModal();
+
+      GeoFire.geoFire.set(id, [location.lat, location.lng]);
     }
 
     $scope.removeEvent = function(event) {
       $scope.events[event.id] = {};
       $scope.events.$save();
+
+      GeoFire.geoFire.remove(event.id);
     }
 }])
 

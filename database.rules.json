@@ -1,17 +1,27 @@
 // These rules only allow a user to read/write to their own portion of the db
+// The rules block users from wiping the entire db, can only write to specific
+// entries in the DB
 
 {
   "rules": {
+    ".read": "auth != null",
     "users": {
       "$uid": {
-        ".read": "auth != null && auth.uid == $uid",
-        ".write": "auth != null && auth.uid == $uid"
+        ".read": "auth.uid == $uid",
+        ".write": "auth.uid == $uid"
       }
     },
     "events": {
-      ".read": "auth != null",
-      ".write": "auth != null",
-      ".indexOn": "creator"
+      ".indexOn": "creator",
+      "$event": {
+        ".write": "auth != null"
+      }
+    },
+    "geo": {
+      ".indexOn": "g",
+      "$geo": {
+        ".write": "auth != null"
+      }
     }
   }
 }

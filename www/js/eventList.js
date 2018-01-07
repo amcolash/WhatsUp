@@ -1,8 +1,13 @@
 angular.module('app.eventList', [])
 
-.factory('EventList', ['$http', 'Event', 'Location', 'FBEventSearch', 'keys', function ($http, Event, Location, FBEventSearch, keys) {
+.factory('EventList', ['$http', 'Event', 'GeoFire', 'FBEventSearch', 'keys', function ($http, Event, GeoFire, FBEventSearch, keys) {
 
   var eventList = {};
+
+  // GeoFire.query.on("key_entered", function() {
+  //   eventList.events = eventList.events || {};
+  //   eventList.events.push
+  // })
   
   eventList.search = function (position) {
     var promise = new Promise(function (resolve, reject) {
@@ -26,6 +31,12 @@ angular.module('app.eventList', [])
         maxEvents,
         position
       };
+
+      // Update geofire query
+      GeoFire.query.updateCriteria({
+        center: [config.position.lat, config.position.lng],
+        radius: config.distance * 1609.34
+      });
 
       // Run all promises, do not fail on promises that are rejected
       Promise.settleAll([
@@ -69,8 +80,6 @@ angular.module('app.eventList', [])
         }
         categories.push("All");
         categories.sort();
-
-        console.log(categories);
 
         eventList.data = { events, categories, position };
 

@@ -76,6 +76,29 @@ angular.module('app.factories', [])
   return $firebaseObject(ref).$loaded();
 }])
 
+.factory('GeoFire', ['$firebaseObject', function ($firebaseObject) {
+  var ref = firebase.database().ref('geo');
+  var geoFire = new GeoFire(ref);
+
+  var query = geoFire.query({
+    center: [43.074, -89.392],
+    radius: 3000
+  });
+
+  var events = {};
+
+  query.on("key_entered", function (key, location) {
+    events[key] = $firebaseObject(firebase.database().ref('events/' + key));
+  });
+
+  query.on("key_exited", function (key, location) {
+    if (events[key]) events[key].$destroy();
+    events[key] = undefined;
+  });
+
+  return { geoFire: geoFire, query: query, events: events };
+}])
+
 // Use for favorites I think
 .factory('MyEvents', ['Auth', '$firebaseArray', function (Auth, $firebaseArray) {
   var ref = firebase.database().ref('users/' + Auth.$getAuth().uid + '/myevents');
