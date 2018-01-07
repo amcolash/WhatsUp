@@ -80,23 +80,52 @@ angular.module('app.factories', [])
   var ref = firebase.database().ref('geo');
   var geoFire = new GeoFire(ref);
 
-  var query = geoFire.query({
-    center: [43.074, -89.392],
-    radius: 3000
-  });
+  var query;
+  var events = [];
 
-  var events = {};
+  var updateQuery = function(config) {
+    var eventIDs = [];
+    events = []; // Clear existing events
 
-  query.on("key_entered", function (key, location) {
-    events[key] = $firebaseObject(firebase.database().ref('events/' + key));
-  });
+    var promise = new Promise(function (resolve, reject) {
+      if (query) query.cancel();
 
-  query.on("key_exited", function (key, location) {
-    if (events[key]) events[key].$destroy();
-    events[key] = undefined;
-  });
+      query = geoFire.query(config);
 
-  return { geoFire: geoFire, query: query, events: events };
+      query.on("ready", function () {
+        var promises = [];
+
+        for (var i = 0; i < eventIDs.length; i++) {
+          var ref = firebase.database().ref('events/' + eventIDs[i]);
+          promises.push(ref.once("value"));
+        }
+
+        Promise.settleAll(promises).then(function(data) {
+          for (var i = 0; i < data.length; i++) {
+            events.push(data[i].val());
+          }
+
+          resolve(events);
+        }).catch(function(error) {
+          console.error(error);
+          reject();
+        });
+      })
+
+      query.on("key_entered", function (key, location) {
+        eventIDs.push(key);
+      });
+
+      query.on("key_exited", function (key, location) {
+        var index = eventIDs.indexOf(key);
+        if (index > -1) eventIDs.splice(index, 1);
+      });
+    });
+
+    return promise;
+  };
+
+  return { geoFire: geoFire, updateQuery: updateQuery, events: events };
 }])
 
 // Use for favorites I think

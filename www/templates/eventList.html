@@ -27,7 +27,7 @@
           Category
         </div>
         <select class="expand-select" data-tap-disabled="true" ng-model="selectedCategory" ng-options="category for category in categories | orderBy"></select>
-      </divl>
+      </div>
     </div>
 
     <div ng-repeat="event in events" ng-show="([event] | filter:searchText | categoryFilter:selectedCategory | upcomingFilter).length">

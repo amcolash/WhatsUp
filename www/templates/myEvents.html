@@ -6,7 +6,7 @@
             </button>
         </div>
 
-        <div ng-repeat="event in events">
+        <div ng-repeat="event in events | orderObjectBy:'startTime':false | upcomingFilter">
             <ng-include src="'templates/eventCard.html'"></ng-include>
         </div>
     </ion-content>

@@ -3,11 +3,6 @@ angular.module('app.eventList', [])
 .factory('EventList', ['$http', 'Event', 'GeoFire', 'FBEventSearch', 'keys', function ($http, Event, GeoFire, FBEventSearch, keys) {
 
   var eventList = {};
-
-  // GeoFire.query.on("key_entered", function() {
-  //   eventList.events = eventList.events || {};
-  //   eventList.events.push
-  // })
   
   eventList.search = function (position) {
     var promise = new Promise(function (resolve, reject) {
@@ -32,18 +27,13 @@ angular.module('app.eventList', [])
         position
       };
 
-      // Update geofire query
-      GeoFire.query.updateCriteria({
-        center: [config.position.lat, config.position.lng],
-        radius: config.distance * 1609.34
-      });
-
       // Run all promises, do not fail on promises that are rejected
       Promise.settleAll([
         // Comment these out to disable specific services from the event search
         fbPromise(config),
         meetupPromise(config),
-        eventbritePromise(config)
+        eventbritePromise(config),
+        customEventsPromise(config)
       ])
       .then(function (allData) {
         var events = [];
@@ -166,6 +156,20 @@ angular.module('app.eventList', [])
         }).catch(function (error) {
           return reject(error);
         });
+    });
+  }
+
+  function customEventsPromise(config) {
+    return new Promise(function (resolve, reject) {
+      GeoFire.updateQuery({
+        center: [config.position.lat, config.position.lng],
+        radius: config.distance * 1609.34
+      }).then(function(data) {
+        if (config.logEvents) console.log(data);
+        return resolve(data);
+      }).catch(function(error) {
+        return reject(error);
+      });
     });
   }
 

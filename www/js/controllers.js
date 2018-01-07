@@ -98,13 +98,19 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('MyEventsController', ['$firebaseObject', '$geolocation', '$ionicModal', '$scope', 'Auth', 'CustomEvents', 'Event', 'EventList', 'GeoFire', 'MyEvents',
-  function ($firebaseObject, $geolocation, $ionicModal, $scope, Auth, CustomEvents, Event, EventList, GeoFire, MyEvents) {
+.controller('MyEventsController', ['$firebaseObject', '$geolocation', '$ionicHistory', '$ionicLoading', '$ionicModal', '$scope',
+    'Auth', 'CustomEvents', 'Event', 'EventList', 'GeoFire', 'MyEvents',
+  function ($firebaseObject, $geolocation, $ionicHistory, $ionicLoading, $ionicModal, $scope,
+    Auth, CustomEvents, Event, EventList, GeoFire, MyEvents) {
+
+    //$ionicLoading.show({ "showBackdrop": false });
+
     CustomEvents.then(function(data) {
       $scope.events = data;
+      //$ionicLoading.hide();
     });
 
-    $scope.geoFireEvents = GeoFire.events;
+    $scope.canEditEvents = true;
     $scope.newEvent = {};
     $scope.categoryList = ["Business", "Crafts", "Dance", "Family & Education", "Film & Media",
       "Fitness", "Food & Drink", "Health", "Music", "Other", "Science & Tech", "Theater", "Travel & Outdoor"];
@@ -208,9 +214,11 @@ angular.module('app.controllers', [])
       $scope.events[event.id] = event;
       $scope.events.$save();
 
-      $scope.closeModal();
-
       GeoFire.geoFire.set(id, [location.lat, location.lng]);
+      
+      $scope.resetEventList();
+
+      $scope.closeModal();
     }
 
     $scope.removeEvent = function(event) {
@@ -218,6 +226,14 @@ angular.module('app.controllers', [])
       $scope.events.$save();
 
       GeoFire.geoFire.remove(event.id);
+
+      $scope.resetEventList()
+    }
+
+    $scope.resetEventList = function() {
+      EventList.reset();
+      $ionicHistory.clearCache();
+      $ionicHistory.clearHistory();
     }
 }])
 

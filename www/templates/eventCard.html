@@ -43,7 +43,7 @@
             </span>
         </p>
 
-        <div ng-if="event.creator">
+        <div ng-if="event.creator && canEditEvents">
             <button class="button icon-pencil button-energized" ng-click="editEvent(event)">
                 <span class="span-button">Edit</span>
             </button>

@@ -30,12 +30,12 @@ var ionicApp = angular.module('app', [
   if (keys.googleId.length == 0) {
     console.error("Missing googleId for Oauth");
   }
-  // if (keys.twitterId.length == 0) {
-  //   console.error("Missing twitterId for Oauth");
-  // }
-  // if (keys.twitterSecret.length == 0) {
-  //   console.error("Missing twitterSecret for Oauth");
-  // }
+  if (keys.twitterId.length == 0) {
+    console.error("Missing twitterId for Oauth");
+  }
+  if (keys.twitterSecret.length == 0) {
+    console.error("Missing twitterSecret for Oauth");
+  }
   if (keys.facebookId.length == 0) {
     console.error("Missing facebookId for Oauth");
   }
@@ -84,6 +84,7 @@ var ionicApp = angular.module('app', [
 
     if (toState.name !== 'error' && !navigator.onLine) {
       event.preventDefault();
+      console.error("offline");
       $state.go('error');
     }
 
@@ -104,7 +105,7 @@ var ionicApp = angular.module('app', [
       console.error('not authenticated');
       $state.go('login');
     } else {
-      console.log("state change error")
+      console.error("state change error");
       $state.go('error');
     }
   });
