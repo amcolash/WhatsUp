@@ -34,7 +34,7 @@ angular.module('app.eventList', [])
         meetupPromise(config),
         eventbritePromise(config),
         customEventsPromise(config),
-        favorites()
+        Favorites.promise // wait for favorites to load, just in case
       ])
       .then(function (allData) {
         var events = [];
@@ -173,11 +173,6 @@ angular.module('app.eventList', [])
       });
     });
   }
-
-  function favorites() {
-    return Favorites;
-  }
-
 
   return eventList;
 }]);

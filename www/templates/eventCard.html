@@ -1,28 +1,37 @@
 <div class="list card">
     <div class="item item-avatar">
         <img ng-src="{{event.picture}}" src="img/event.png">
-        <i ng-class="event.icon"></i>
-        <a target="_blank" href="{{event.url}}">
-            <span>{{event.name}}</span>
-            <i ng-if="event.cost > 0" class="icon icon-coin-dollar"></i>
-        </a>
 
-        <p>
-            <div>
-                <span class="icon icon-map2"></span>
-                <span ng-if="event.location">
-                    <a target="_blank" href="https://maps.google.com/?q={{event.location | locationMap}}">
-                        {{event.location | location}}
-                    </a>
-                </span>
-                <span ng-if="!event.location">
-                    No location speficied, check the event page
-                </span>
-            </div>
+        <div class="float-left">
+            <i ng-class="event.icon"></i>
+            <a target="_blank" href="{{event.url}}">
+                <span>{{event.name}}</span>
+                <i ng-if="event.cost > 0" class="icon icon-coin-dollar"></i>
+            </a>
+    
+            <p>
+                <div>
+                    <span class="icon icon-map2"></span>
+                    <span ng-if="event.location">
+                        <a target="_blank" href="https://maps.google.com/?q={{event.location | locationMap}}">
+                            {{event.location | location}}
+                        </a>
+                    </span>
+                    <span ng-if="!event.location">
+                        No location speficied, check the event page
+                    </span>
+                </div>
+    
+                {{event.startTime | date:'MMMM d, hh:mm a'}}
+                <span ng-if="event.endTime">- {{event.endTime | date:'MMMM d, hh:mm a'}}</span>
+            </p>
+        </div>
+        <div class="float-right">
+            <button class="button icon" ng-class="{'icon-star-full button-energized': Favorites.isFavorite(event), 'icon-star-empty': !Favorites.isFavorite(event)}"
+                ng-click="Favorites.toggleFavorite(event)"></button>
+        </div>
 
-            {{event.startTime | date:'MMMM d, hh:mm a'}}
-            <span ng-if="event.endTime">- {{event.endTime | date:'MMMM d, hh:mm a'}}</span>
-        </p>
+        <div class="clear-both"></div>
     </div>
 
     <div class="item item-body">

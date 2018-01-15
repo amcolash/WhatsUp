@@ -12,6 +12,18 @@
   width: 100%;
 }
 
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.clear-both {
+  clear: both;
+}
+
 /* Colors */
 .red {
   color: #d32424;

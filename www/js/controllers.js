@@ -41,13 +41,14 @@ angular.module('app.controllers', [])
   };
 }])
 
-.controller('EventListController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', 'EventList', 'Settings',
-    function ($geolocation, $ionicLoading, $ionicPopup, $scope, EventList, Settings) {
+.controller('EventListController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', 'EventList', 'Favorites', 'Settings',
+    function ($geolocation, $ionicLoading, $ionicPopup, $scope, EventList, Favorites, Settings) {
   $scope.events;
   $scope.searchText = "";
   $scope.categories;
   $scope.selectedCategory;
   $scope.position;
+  $scope.Favorites = Favorites;
 
   Settings.then(function (data) {
     if (data.location) {

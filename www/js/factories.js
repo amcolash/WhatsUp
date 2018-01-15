@@ -135,5 +135,38 @@ angular.module('app.factories', [])
 
 .factory('Favorites', ['Auth', '$firebaseArray', function (Auth, $firebaseArray) {
   var ref = firebase.database().ref('users/' + Auth.$getAuth().uid + '/favorites');
-  return $firebaseArray(ref).$loaded();
+  var array = $firebaseArray(ref);
+
+  var addFavorite = function(event) {
+    array.$add({ id: event.id });
+  }
+
+  var removeFavorite = function(event) {
+    for (var i = 0; i < array.length; i++) {
+      if (array[i].id === event.id) {
+        array.$remove(i);
+      }
+    }
+  }
+  
+  var isFavorite = function (event) {
+    for (var i = 0; i < array.length; i++) {
+      if (array[i].id === event.id) return true;
+    }
+    return false;
+  }
+
+  var toggleFavorite = function (event) {
+    if (isFavorite(event)) {
+      removeFavorite(event);
+    } else {
+      addFavorite(event);
+    }
+  }
+
+  return {
+    isFavorite: isFavorite,
+    toggleFavorite: toggleFavorite,
+    promise: array.$loaded()
+  };
 }])
