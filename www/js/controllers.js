@@ -74,15 +74,17 @@ angular.module('app.controllers', [])
     }
   });
 
-  $scope.search = function() {
+  $scope.search = function(forced) {
     $ionicLoading.show({ "showBackdrop": false });
 
-    EventList.search($scope.position).then(function (data) {
+    EventList.search($scope.position, forced).then(function (data) {
       $ionicLoading.hide();
 
       $scope.categories = data.categories;
       $scope.events = data.events;
-      $scope.selectedCategory = "All";
+      if (!forced) {
+        $scope.selectedCategory = "All";
+      }
     }).catch(function (error) {
       $ionicLoading.hide();
       console.error(error);
@@ -237,8 +239,8 @@ angular.module('app.controllers', [])
     }
 }])
 
-.controller('MapController', ['$geolocation', '$ionicLoading', '$ionicPopup', '$scope', '$timeout', 'EventList', 'NgMap', 'Settings',
-  function ($geolocation, $ionicLoading, $ionicPopup, $scope, $timeout, EventList, NgMap, Settings) {
+.controller('MapController', ['$geolocation', '$interval', '$ionicLoading', '$ionicPopup', '$scope', 'EventList', 'NgMap', 'Settings',
+  function ($geolocation, $interval, $ionicLoading, $ionicPopup, $scope, EventList, NgMap, Settings) {
 
     $scope.events;
     $scope.map;
@@ -247,16 +249,11 @@ angular.module('app.controllers', [])
     $scope.radius = 30;
     $scope.theta = 0;
 
-    $scope.intervalFunction = function () {
-      $timeout(function () {
-        $scope.radius = Math.abs(Math.sin($scope.theta)) * 15 + 35;
-        $scope.theta += .1;
-        $scope.intervalFunction();
-      }, 100)
-    };
-
-    $scope.intervalFunction();
-
+    $interval(function () {
+      $scope.radius = Math.abs(Math.sin($scope.theta)) * 15 + 35;
+      $scope.theta += .2;
+    }, 150);
+    
     Settings.then(function (data) {
       if (data.location) {
         $scope.position = data.location;
@@ -282,10 +279,10 @@ angular.module('app.controllers', [])
       }
     });
 
-    $scope.search = function () {
+    $scope.search = function (forced) {
       $ionicLoading.show({ "showBackdrop": false });
 
-      EventList.search($scope.position).then(function (data) {
+      EventList.search($scope.position, forced).then(function (data) {
         $ionicLoading.hide();
 
         $scope.events = data.events;
@@ -293,8 +290,10 @@ angular.module('app.controllers', [])
         NgMap.getMap().then(function (map) {
           $scope.map = map;
 
-          map.setCenter($scope.position);
-          map.setZoom(15);
+          if (!forced) {
+            map.setCenter($scope.position);
+            map.setZoom(15);
+          }
         });
       }).catch(function (error) {
         $ionicLoading.hide();

@@ -1,4 +1,8 @@
 <ion-view title="Map">
+  <ion-nav-buttons side="secondary">
+    <button class="button icon icon-refresh" ng-click="search(true)"></button>
+  </ion-nav-buttons>
+
   <ion-content class="has-header">
     <ng-map center="41,-87" zoom="3" map-type-control="false" fullscreen-control="false">
       <marker ng-repeat="event in events | upcomingFilter" id="{{event.id}}" position="{{event.location.lat}}, {{event.location.lng}}" title="{{event.name}}"

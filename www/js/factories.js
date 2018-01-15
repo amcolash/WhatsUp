@@ -128,8 +128,12 @@ angular.module('app.factories', [])
   return { geoFire: geoFire, updateQuery: updateQuery, events: events };
 }])
 
-// Use for favorites I think
 .factory('MyEvents', ['Auth', '$firebaseArray', function (Auth, $firebaseArray) {
   var ref = firebase.database().ref('users/' + Auth.$getAuth().uid + '/myevents');
+  return $firebaseArray(ref).$loaded();
+}])
+
+.factory('Favorites', ['Auth', '$firebaseArray', function (Auth, $firebaseArray) {
+  var ref = firebase.database().ref('users/' + Auth.$getAuth().uid + '/favorites');
   return $firebaseArray(ref).$loaded();
 }])

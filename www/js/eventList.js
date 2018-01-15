@@ -1,13 +1,13 @@
 angular.module('app.eventList', [])
 
-.factory('EventList', ['$http', 'Event', 'GeoFire', 'FBEventSearch', 'keys', function ($http, Event, GeoFire, FBEventSearch, keys) {
+.factory('EventList', ['$http', 'Event', 'Favorites', 'GeoFire', 'FBEventSearch', 'keys', function ($http, Event, Favorites, GeoFire, FBEventSearch, keys) {
 
   var eventList = {};
   
-  eventList.search = function (position) {
+  eventList.search = function (position, override) {
     var promise = new Promise(function (resolve, reject) {
     
-      if (eventList.data) {
+      if (eventList.data && !override) {
         console.log("using cached data");
         resolve(eventList.data);
       }
@@ -33,7 +33,8 @@ angular.module('app.eventList', [])
         fbPromise(config),
         meetupPromise(config),
         eventbritePromise(config),
-        customEventsPromise(config)
+        customEventsPromise(config),
+        favorites()
       ])
       .then(function (allData) {
         var events = [];
@@ -171,6 +172,10 @@ angular.module('app.eventList', [])
         return reject(error);
       });
     });
+  }
+
+  function favorites() {
+    return Favorites;
   }
 
 
