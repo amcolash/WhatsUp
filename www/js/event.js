@@ -104,9 +104,10 @@ angular.module('app.event', [])
             var zip = meetupEvent.venue.zip;
             var lat = meetupEvent.venue.lat;
             var lng = meetupEvent.venue.lon;
+            var name = meetupEvent.venue.name;
             var distance = measureGeo(position.lat, position.lng, lat, lng);
 
-            var location = new Location(street, city, state, zip, lat, lng, distance);
+            var location = new Location(street, city, state, zip, lat, lng, distance, name);
         }
 
         return new Event(id, name, description, url, startTime, endTime, icon, source, category, cost, attending, picture, location);
